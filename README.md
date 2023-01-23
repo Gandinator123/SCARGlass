@@ -1,0 +1,2 @@
+# SCARGlass
+Embedded systems project
