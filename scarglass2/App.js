@@ -1,9 +1,30 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+
+
+///////////////////////////////////////
+//// EVERYTHING ABOUT HOMESCREEN STUFF
+
+// TAB constaining stack components (everything on that screen)
+const HomeStack = createNativeStackNavigator();
+function HomeStackScreen() {
+ return (
+   <HomeStack.Navigator
+   screenOptions={{
+    headerShown: false
+  }}>
+    <HomeStack.Screen name="Home" component={HomeScreen} />             
+    <HomeStack.Screen name="Layout" component={LayoutScreen} />
+   </HomeStack.Navigator>
+  );
+}
+
+// Stack components
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -12,6 +33,31 @@ function HomeScreen() {
   );
 }
 
+function LayoutScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center',  alignItems: 'center' }}>
+      <Text>Layout!</Text>
+    </View>
+  );
+}
+//////////////////////////////////////////
+//////////////////////////////////////////
+
+// TAB constaining stack components (everything on that screen)
+const SettingsStack = createNativeStackNavigator();
+function SettingsStackScreen() {
+  return (
+    <SettingsStack.Navigator
+    screenOptions={{
+      headerShown: false
+    }}>
+      <SettingsStack.Screen name="Settings" component={SettingsScreen} />
+      <SettingsStack.Screen name="Details" component={DetailsScreen} />
+    </SettingsStack.Navigator>
+  );
+}
+
+// stack components
 function SettingsScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -20,15 +66,64 @@ function SettingsScreen() {
   );
 }
 
-function Responses() {
+
+function DetailsScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Responses!</Text>
+    <View style={{ flex: 1, justifyContent: 'center',  alignItems: 'center' }}>
+      <Text>Layout!</Text>
     </View>
   );
 }
 
+
+//////////////////////////////////////
+//////////////////////////////////////
+
+//stack components
+function ResponsesScreen({navigation}) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Responses!</Text>
+      <Button
+        title="Pictures"
+        onPress={() => navigation.navigate('PicturesScreen')}
+      />
+    </View>
+  );
+}
+
+// TAB constaining stack components (everything on that screen)
+const ResponsesStack = createNativeStackNavigator();
+function ResponsesStackScreen() {
+  return (
+    <ResponsesStack.Navigator
+      screenOptions={{
+      headerShown: false
+    }}>
+      <ResponsesStack.Screen name="ResponsesScreen" component={ResponsesScreen} />
+    </ResponsesStack.Navigator>
+  );
+}
+
+function PicturesScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Pictures</Text>
+    </View>
+  );
+}
+
+function ChatGPTresponses() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>ChatGPTresponses</Text>
+    </View>
+  );
+}
+
+
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
@@ -53,10 +148,13 @@ export default function App() {
           tabBarInactiveTintColor: 'gray',
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Responses" component={Responses} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Responses" component={ResponsesStackScreen} />
+        <Tab.Screen name="Settings" component={SettingsStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
+
+
+
