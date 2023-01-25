@@ -1,5 +1,9 @@
 import socket
 
+class question:
+    def __init__(self, q, ans):
+        self.q = q
+        self.ans = ans
 
 def client_program():
     host = '54.166.86.212'  # as both code is running on same pc
