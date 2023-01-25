@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Text, View,  StyleSheet, Pressable } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -18,7 +18,7 @@ function HomeStackScreen() {
    screenOptions={{
     headerShown: false
   }}>
-    <HomeStack.Screen name="Home" component={HomeScreen} />             
+    <HomeStack.Screen name="Home" component={HomeScreen} />
     <HomeStack.Screen name="Layout" component={LayoutScreen} />
    </HomeStack.Navigator>
   );
@@ -79,19 +79,6 @@ function DetailsScreen() {
 //////////////////////////////////////
 //////////////////////////////////////
 
-//stack components
-function ResponsesScreen({navigation}) {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Responses!</Text>
-      <Button
-        title="Pictures"
-        onPress={() => navigation.navigate('PicturesScreen')}
-      />
-    </View>
-  );
-}
-
 // TAB constaining stack components (everything on that screen)
 const ResponsesStack = createNativeStackNavigator();
 function ResponsesStackScreen() {
@@ -101,10 +88,32 @@ function ResponsesStackScreen() {
       headerShown: false
     }}>
       <ResponsesStack.Screen name="ResponsesScreen" component={ResponsesScreen} />
+      <ResponsesStack.Screen name="PicturesScreen" component={PicturesScreen} />
+      <ResponsesStack.Screen name="ChatGPTresponses" component={ChatGPTresponses} />
     </ResponsesStack.Navigator>
   );
 }
 
+//stack components
+function ResponsesScreen({navigation}) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}>
+      <Button
+        title="Pictures"
+        onPress={() => navigation.navigate('PicturesScreen')}
+      />
+      <Button
+        title="ChatGPT"
+        onPress={() => navigation.navigate('ChatGPTresponses')}
+      />
+
+      <Button
+        title="Coming soon!!"
+        onPress={() => navigation.navigate('ChatGPTresponses')}
+      />
+    </View>
+  );
+}
 function PicturesScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -124,6 +133,41 @@ function ChatGPTresponses() {
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+//////////////////////////////
+// Button styling
+function Button({onPress, title}) {
+  // const { onPress, title = 'Save' } = props;
+  return (
+    <Pressable style={styles.button} onPress={onPress}>
+      <Text style={styles.text}>{title}</Text>
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'black',
+  },
+  text: {
+    fontSize: 50,
+    lineHeight: 80,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  },
+});
+
+
+
+
+//////////////////////////////
+//////////////////////////////
 
 export default function App() {
   return (
