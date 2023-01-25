@@ -108,7 +108,7 @@ function ResponsesScreen({navigation}) {
       />
 
       <Button
-        title="Coming soon!!"
+        title="Coming Soon..."
         onPress={() => navigation.navigate('ChatGPTresponses')}
       />
     </View>
@@ -147,14 +147,15 @@ function Button({onPress, title}) {
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyCContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 32,
-    borderRadius: 4,
+    borderRadius: 40,
     elevation: 3,
     backgroundColor: 'black',
   },
   text: {
+    aligalignItems: 'center',
     fontSize: 50,
     lineHeight: 80,
     fontWeight: 'bold',
