@@ -38,6 +38,6 @@ class ScreenModel(models.Model):
   background_green = models.IntegerField(default=255)
   background_blue = models.IntegerField(default=255)
 
-  font_red = models.IntegerField(default=255)
-  font_green = models.IntegerField(default=255)
-  font_blue = models.IntegerField(default=255)
+  font_red = models.IntegerField(default=0)
+  font_green = models.IntegerField(default=0)
+  font_blue = models.IntegerField(default=0)
