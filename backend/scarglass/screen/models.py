@@ -1,9 +1,6 @@
 from django.db import models
 
 class ScreenModel(models.Model):
-  time_red = models.IntegerField(default=255)
-  time_green = models.IntegerField(default=255)
-  time_blue = models.IntegerField(default=255)
   time_font = models.CharField(max_length=255, default='Montserrat-Black')
   time_size = models.IntegerField(default=16)
 
@@ -15,9 +12,6 @@ class ScreenModel(models.Model):
   )
   time_format = models.IntegerField(choices=TIME_CHOICES, default=0)
 
-  date_red = models.IntegerField(default=255)
-  date_green = models.IntegerField(default=255)
-  date_blue = models.IntegerField(default=255)
   date_font = models.CharField(max_length=255, default='Montserrat-Medium')
   date_size = models.IntegerField(default=12)
 
