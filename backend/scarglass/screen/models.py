@@ -24,7 +24,6 @@ class ScreenModel(models.Model):
 
   DATE_CHOICES = (
     (0, '%d/%m/%Y'),
-    (1, '%d/%m/%y'),
   )
   date_format = models.IntegerField(choices=DATE_CHOICES, default=0)
 
