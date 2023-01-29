@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Text, View, StyleSheet, Pressable } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import DropDownPicker from "react-native-dropdown-picker";
+import HomeScreen from "./screens/HomeScreen";
 
 ///////////////////////////////////////
 //// EVERYTHING ABOUT HOMESCREEN STUFF
@@ -25,61 +25,6 @@ function HomeStackScreen() {
 }
 
 // Stack components
-const HomeScreen = () => {
-  const [timeFormatOpen, setTimeFormatOpen] = useState(false);
-  const [timeFormatValue, setTimeFormatValue] = useState(0);
-  const [timeFormatItems, setTimeFormatItems] = useState([
-    { label: "HH:MM:SS (24 hr)", value: 0 },
-    { label: "HH:MM (24 hr)", value: 1 },
-    { label: "HH:MM:SS AM/PM", value: 2 },
-    { label: "HH:MM AM/PM", value: 3 },
-  ]);
-  const [dateFormatOpen, setDateFormatOpen] = useState(false);
-  const [dateFormatValue, setDateFormatValue] = useState(0);
-  const [dateFormatItems, setDateFormatItems] = useState([
-    { label: "dd/mm/yyyy", value: 0 },
-    { label: "dd/mm/yy", value: 1 },
-  ]);
-  const [dayFormatOpen, setDayFormatOpen] = useState(false);
-  const [dayFormatValue, setDayFormatValue] = useState(0);
-  const [dayFormatItems, setDayFormatItems] = useState([
-    { label: "Full (e.g. Wednesday)", value: 0 },
-    { label: "Short (e.g. Wed)", value: 1 },
-    { label: "None", value: 2 },
-  ]);
-
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Time format:</Text>
-      <DropDownPicker
-        open={timeFormatOpen}
-        value={timeFormatValue}
-        items={timeFormatItems}
-        setOpen={setTimeFormatOpen}
-        setValue={setTimeFormatValue}
-        setItems={setTimeFormatItems}
-      />
-      <Text>Date format:</Text>
-      <DropDownPicker
-        open={dateFormatOpen}
-        value={dateFormatValue}
-        items={dateFormatItems}
-        setOpen={setDateFormatOpen}
-        setValue={setDateFormatValue}
-        setItems={setDateFormatItems}
-      />
-      <Text>Day format:</Text>
-      <DropDownPicker
-        open={dayFormatOpen}
-        value={dayFormatValue}
-        items={dayFormatItems}
-        setOpen={setDayFormatOpen}
-        setValue={setDayFormatValue}
-        setItems={setDayFormatItems}
-      />
-    </View>
-  );
-};
 
 function LayoutScreen() {
   return (
