@@ -14,25 +14,25 @@ import numpy as np
 # woods_image = face_recognition.load_image_file("C:/Users/nhoei/User.1.1.jpg")
 # woods_face_encoding = face_recognition.face_encodings(woods_image)[0]
 
-rohan_image = face_recognition.load_image_file("Dataset/rohan.jpg")
+rohan_image = face_recognition.load_image_file("Camera_module/Dataset/rohan.jpg")
 rohan_face_encoding = face_recognition.face_encodings(rohan_image)[0]
 
-sherif_image = face_recognition.load_image_file("Dataset/sherif.jpg")
-sherif_face_encoding = face_recognition.face_encodings(sherif_image)[0]
+michela_image = face_recognition.load_image_file("Camera_module/Dataset/michela.jpg")
+michela_face_encoding = face_recognition.face_encodings(michela_image)[0]
 # Create arrays of known face encodings and their names
 known_face_encodings = [
     #obama_face_encoding,
     #elon_face_encoding,
     #woods_face_encoding,
     rohan_face_encoding,
-    sherif_face_encoding
+    michela_face_encoding
 ]
 known_face_names = [
     # "Barack Obama",
     # "Elon Musk",
     # "Tiger Woods",
     "rohan",
-    "sherif"
+    "michela"
 ]
 
 # Initialize some variables
