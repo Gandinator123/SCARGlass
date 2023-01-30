@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     'screen',
     'photos',
+    'questions',
 ]
 
 MIDDLEWARE = [
