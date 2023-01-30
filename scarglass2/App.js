@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeScreen from "./screens/HomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import PicturesScreen from "./screens/PicturesScreen";
 
 ///////////////////////////////////////
 //// EVERYTHING ABOUT HOMESCREEN STUFF
@@ -103,13 +104,6 @@ function ResponsesScreen({ navigation }) {
         title="Coming Soon..."
         onPress={() => navigation.navigate("ChatGPTStack")}
       />
-    </View>
-  );
-}
-function PicturesScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Pictures</Text>
     </View>
   );
 }
