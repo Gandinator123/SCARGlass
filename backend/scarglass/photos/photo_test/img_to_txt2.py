@@ -4,10 +4,10 @@ from googletrans import Translator
 
 translator = Translator()
 
-image = 'backend/scarglass/photos/photo_test/spanish.png' #img location
+image = 'backend/scarglass/photos/photo_test/french2.png' #img location
 text = pytesseract.image_to_string(Image.open(image), lang='eng+fra+spa')
 text = text.replace('\n', ' ').replace('\r', ' ')
-print("in spanish:", text)
+print("in fr:", text)
 
 to_eng = translator.translate(text, dest ='en')
 out = to_eng.text.replace('\n', '').replace('\r', '')
