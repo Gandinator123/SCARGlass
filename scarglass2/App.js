@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Pressable } from "react-native";
+import { Text, View, StyleSheet, Pressable, ScrollView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -7,6 +7,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeScreen from "./screens/HomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import PicturesScreen from "./screens/PicturesScreen";
+import ChatGPTresponses from "./screens/ChatGPTScreen";
 
 ///////////////////////////////////////
 //// EVERYTHING ABOUT HOMESCREEN STUFF
@@ -81,6 +82,9 @@ function ResponsesStackScreen() {
       />
       <ResponsesStack.Screen name="PicturesStack" component={PicturesScreen} />
       <ResponsesStack.Screen name="ChatGPTStack" component={ChatGPTresponses} />
+      <ResponsesStack.Screen name="DocumentsScreen" component={DocumentsScreen} />
+      <ResponsesStack.Screen name="TranslatesScreen" component={TranslatesScreen} />
+      <ResponsesStack.Screen name="HandwritingScreen" component={HandwritingScreen} />
     </ResponsesStack.Navigator>
   );
 }
@@ -101,17 +105,43 @@ function ResponsesScreen({ navigation }) {
       />
 
       <Button
-        title="Coming Soon..."
-        onPress={() => navigation.navigate("ChatGPTStack")}
+        title="Documents"
+        onPress={() => navigation.navigate("DocumentsScreen")}
+      />
+
+      <Button
+        title="Translations"
+        onPress={() => navigation.navigate("TranslatesScreen")}
+      />
+
+      <Button
+        title="Handwriting"
+        onPress={() => navigation.navigate("HandwritingScreen")}
       />
     </View>
   );
 }
 
-function ChatGPTresponses() {
+function DocumentsScreen() {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>ChatGPTresponses</Text>
+      <Text>DocumentsScreen</Text>
+    </View>
+  );
+}
+
+function TranslatesScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>TranslatesScreen</Text>
+    </View>
+  );
+}
+
+function HandwritingScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>HandwritingScreen</Text>
     </View>
   );
 }
