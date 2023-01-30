@@ -10,3 +10,7 @@ class PhotoList(generics.ListAPIView):
 class PhotoCreate(generics.CreateAPIView):
   queryset = PhotoModel.objects.all()
   serializer_class = PhotoSerializer
+
+class PhotoDelete(generics.DestroyAPIView):
+  queryset = PhotoModel.objects.all()
+  serializer_class = PhotoSerializer
