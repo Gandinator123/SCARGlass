@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeScreen from "./screens/HomeScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
 ///////////////////////////////////////
 //// EVERYTHING ABOUT HOMESCREEN STUFF
@@ -51,14 +52,7 @@ function SettingsStackScreen() {
   );
 }
 
-// stack components
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
+
 
 function DetailsScreen() {
   return (
@@ -172,11 +166,11 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "HomeScreen") {
+            if (route.name === "Home") {
               iconName = focused ? "ios-home" : "ios-home-outline";
-            } else if (route.name === "ResponsesScreen") {
+            } else if (route.name === "Responses") {
               iconName = focused ? "ios-albums" : "ios-albums-outline";
-            } else if (route.name === "SettingsScreen") {
+            } else if (route.name === "Settings") {
               iconName = focused ? "ios-settings" : "ios-settings-outline";
             }
 
@@ -187,9 +181,9 @@ export default function App() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="HomeScreen" component={HomeStackScreen} />
-        <Tab.Screen name="ResponsesScreen" component={ResponsesStackScreen} />
-        <Tab.Screen name="SettingsScreen" component={SettingsStackScreen} />
+        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Responses" component={ResponsesStackScreen} />
+        <Tab.Screen name="Settings" component={SettingsStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
