@@ -12,6 +12,9 @@ from SpeechFunctions import record_audio, audio_to_text, text_to_function, trans
 from Home import TimeComponent, DateComponent, WeatherComponent
 import threading
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 # Configuration for pins:
 cs_pin = digitalio.DigitalInOut(board.D5)
 dc_pin = digitalio.DigitalInOut(board.D6)
@@ -89,9 +92,7 @@ class Screen:
     def keypress_thread(self):
         while True:
             if not GPIO.input(18):
-                print('start scroll')
                 self.global_state = 1
-                break
     
     def record_thread(self):
         record_audio()

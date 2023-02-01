@@ -11,6 +11,9 @@ import uuid
 import os
 import json
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 """
 translate, maths equation solving + pdf scanning
 phrase including 'translate' and one of several predefined languages ['french', 'german', …]
