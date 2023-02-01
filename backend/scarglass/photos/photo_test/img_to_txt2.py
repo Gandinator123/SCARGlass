@@ -4,7 +4,7 @@ from googletrans import Translator
 
 translator = Translator()
 
-image = 'backend/scarglass/photos/photo_test/french2.png' #img location
+image = 'backend/scarglass/photos/photo_test/french2_photo.png' #img location
 text = pytesseract.image_to_string(Image.open(image), lang='eng+fra+spa')
 text = text.replace('\n', ' ').replace('\r', ' ')
 print("in fr:", text)
