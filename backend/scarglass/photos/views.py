@@ -5,6 +5,7 @@ from .serializer import PhotoSerializer
 # from .photo_test import img_to_pdf, img_to_txt2
 from .img_to_txt2 import translate
 import copy
+import cv2
 
 class PhotoList(generics.ListAPIView):
   queryset = PhotoModel.objects.all()
@@ -28,7 +29,10 @@ class PhotoCreate(views.APIView):
     
     elif img_type == '2':
       # QR
-      pass
+      img = cv2.imread(path)
+      detect = cv2.QRCodeDetector()
+      value, points, straight_qrcode = detect.detectAndDecode(img)
+      print(value)
 
     elif img_type == '3':
       # PDF
@@ -36,7 +40,7 @@ class PhotoCreate(views.APIView):
 
     serializer = PhotoSerializer(data=request.data)
     if serializer.is_valid():
-      serializer.save()
+      # serializer.save()
       return response.Response(serializer.data, status=status.HTTP_200_OK)
     return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
