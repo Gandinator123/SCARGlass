@@ -6,6 +6,7 @@ from .serializer import PhotoSerializer
 from .img_to_txt2 import translate
 import copy
 import cv2
+import numpy
 
 class PhotoList(generics.ListAPIView):
   queryset = PhotoModel.objects.all()
@@ -30,7 +31,7 @@ class PhotoCreate(views.APIView):
     elif img_type == '2':
       # QR
       temp = copy.deepcopy(request.FILES['photo'])
-      img = cv2.imread(temp)
+      img = cv2.imdecode(numpy.fromstring(temp.read(), numpy.uint8), cv2.IMREAD_UNCHANGED)
       detect = cv2.QRCodeDetector()
       text, points, straight_qrcode = detect.detectAndDecode(img)
       print(text)
