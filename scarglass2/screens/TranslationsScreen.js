@@ -8,7 +8,7 @@ const Translationsmodal = ({photo}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   console.log("PHOTO: ", photo)
-      
+  let translation = photo['text'];
   return (
     <View>
       <Modal
@@ -26,9 +26,9 @@ const Translationsmodal = ({photo}) => {
             uri: photo['photo']
           }}
         />
-        <View style={styles.translationbox}> 
+        <ScrollView style={styles.translationbox}> 
         <Text style={styles.translationfont}>Translation: {photo['text']} </Text>
-        </View>
+        </ScrollView> 
       </View>
         <TouchableOpacity onPress={()=> setModalVisible(false)} style={styles.overlay}> 
           <View>
@@ -110,9 +110,11 @@ const TranslationScreen = () => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 0,
+      marginTop: 22,
     },
     modalView: {
+      marginTop: 60,
+      margin: 0,
       alignItems: 'center',
       shadowColor: '#000',
       shadowOffset: {
@@ -135,11 +137,12 @@ const TranslationScreen = () => {
       alignSelf : 'baseline'
     },
     translationbox : {
-        paddingVertical: 12,
-        paddingHorizontal: 0,
+        position: 'absolute',
+        top: 475,
+        bottom: 2,
+        paddingVertical: 2,
         borderRadius: 20,
         margin : 15,
-        elevation: 3,
         backgroundColor: "rgba(245, 235, 238, 0.7)",
         alignSelf : 'baseline'
     }

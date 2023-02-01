@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Pressable, ScrollView } from "react-native";
+import { Text, View, StyleSheet, Pressable, ScrollView, Image, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -58,7 +58,7 @@ function SettingsStackScreen() {
 
 function DetailsScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View >
       <Text>Layout!</Text>
     </View>
   );
@@ -89,34 +89,40 @@ function ResponsesStackScreen() {
   );
 }
 
+
 //stack components
 function ResponsesScreen({ navigation }) {
   return (
     <View
-      style={{ flex: 1, justifyContent: "space-evenly", alignItems: "center" }}
+      style={{ flex: 1, justifyContent: "space-evenly", alignItems: "center"}}
     >
       <Button
         title="Pictures"
         onPress={() => navigation.navigate("PicturesStack")}
+        image='./images/glasses_318-616661.png'
       />
       <Button
         title="ChatGPT"
         onPress={() => navigation.navigate("ChatGPTStack")}
+        image='./images/chatgpt.png'
       />
 
       <Button
         title="Documents"
         onPress={() => navigation.navigate("DocumentsScreen")}
+        image='./images/documents.png'
       />
 
       <Button
         title="Translations"
         onPress={() => navigation.navigate("TranslationScreen")}
+        image='./images/translate.png'
       />
 
       <Button
         title="QRScreen"
         onPress={() => navigation.navigate("QRScreen")}
+        image='./images/qrcode.png'
       />
     </View>
   );
@@ -152,6 +158,21 @@ function Button({ onPress, title }) {
   );
 }
 
+// function Button({ onPress, title, image }) {
+//   // const { onPress, title = 'Save' } = props;
+//   console.log(image)
+//   return (
+//     <View style={styles.button2}>
+//     <TouchableOpacity onPress={onPress}>
+//         <Image
+//         style={styles.deviceimage}
+//           source={image}
+//         />
+//       </TouchableOpacity>
+//     </View>
+//   );
+// }
+
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
@@ -162,6 +183,17 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: "black",
   },
+  button2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "space-evenly",
+    backgroundColor: '#485a96',
+    borderWidth: 0.5,
+    borderColor: '#fff',
+    height: 40,
+    borderRadius: 5,
+    margin: 5,
+  },
   text: {
     aligalignItems: "center",
     fontSize: 50,
@@ -169,6 +201,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+  },
+  containerprofile: {
+    flex: 1,
+    alignContent: 'center',
+    backgroundColor: '#859a9b', //change for dominant colour in the image.
+    justifyContent: 'flex-start',
+  },
+  deviceimage: {
+    width: 100,
+    height: 100,
   },
 });
 
