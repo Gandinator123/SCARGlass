@@ -7,7 +7,7 @@ from adafruit_rgb_display import st7735
 from datetime import datetime
 import requests
 import json
-from SpeechFunctions import record_audio, audio_to_text, text_to_function
+from SpeechFunctions import record_audio, audio_to_text, text_to_function, translate, scan_pdf, scan_qr, save_text, take_picture, error
 from Home import TimeComponent, DateComponent, WeatherComponent
 import threading
 
@@ -25,6 +25,15 @@ SCREEN_X_OFFSET = 0
 SCREEN_Y_OFFSET = 22
 
 BASE_URL = 'http://54.234.70.84:8000/'
+
+OPERATIONS = [
+    ('Translating...', translate), # translate()
+    ('Scanning...', scan_pdf), # scan_pdf()
+    ('Scanning...', scan_qr), # scan_qr()
+    ('Saving...', save_text), # solve_equation()
+    ('Hold still...', take_picture), # take_picture()
+    ('Oops! Try again?', error),
+]
         
 class Screen:
     def __init__(self):
@@ -131,8 +140,6 @@ class Screen:
 
             self.postProcess()
 
-        self.global_state = 0
-
     def homePage(self):
         self.preProcess()
         self.dateComponent.show()
@@ -175,10 +182,31 @@ class Screen:
             self.postProcess()
 
         # handle text
-        text_to_function(result[0])
+        print(result)
+        op = text_to_function(result[0])
+        if isinstance(op, int):
+            # op is operation 
+            op_t = threading.Thread(target=OPERATIONS[op][1])
+            op_t.start()
 
-        # after getting response, show question/response
-        self.scroll(result[0])
+            while op_t.is_alive():
+                self.preProcess()
+                text = OPERATIONS[op][0]
+                (font_width, font_height) = self.font.getsize(text)
+                self.draw.text(
+                    (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                    text,
+                    font=self.font,
+                    fill=self.fontColor,
+                )
+                self.postProcess()
+
+        else:
+            # op is text to render
+            # TODO show question too
+            self.scroll(op)
+        
+        self.global_state = 0
 
     def run(self):
         while True:
