@@ -13,15 +13,12 @@ class PhotoList(generics.ListAPIView):
 class PhotoCreate(views.APIView):
   def post(self, request, format=None):
     img_type = request.data['img_type']
-    print(img_type)
-    print(type(img_type))
-    print(img_type == 1)
 
-    if img_type == 0:
+    if img_type == '0':
       # NOTHING
       pass
 
-    elif img_type == 1:
+    elif img_type == '1':
       # TRANSLATE
       temp = copy.deepcopy(request.data['photo'])
       text = translate(temp)
@@ -29,11 +26,11 @@ class PhotoCreate(views.APIView):
       request.data['text'] = text
       request.data._mutable = False
     
-    elif img_type == 2:
+    elif img_type == '2':
       # QR
       pass
 
-    elif img_type == 3:
+    elif img_type == '3':
       # PDF
       pass    
 
