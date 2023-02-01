@@ -16,8 +16,8 @@ class PhotoCreate(views.APIView):
     serializer = PhotoSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
-      return response.Response(status=status.HTTP_200_OK)
-    return response.Response(status=status.HTTP_400_BAD_REQUEST)
+      return response.Response(serializer.data, status=status.HTTP_200_OK)
+    return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PhotoDelete(generics.DestroyAPIView):
   queryset = PhotoModel.objects.all()
