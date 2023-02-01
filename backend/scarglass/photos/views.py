@@ -3,6 +3,7 @@ from rest_framework import generics, views, permissions, response, status
 from .models import PhotoModel
 from .serializer import PhotoSerializer
 # from .photo_test import img_to_pdf, img_to_txt2
+from img_to_txt2 import translate
 
 class PhotoList(generics.ListAPIView):
   queryset = PhotoModel.objects.all()
@@ -11,7 +12,7 @@ class PhotoList(generics.ListAPIView):
 class PhotoCreate(views.APIView):
   def post(self, request, format=None):
     request.data._mutable = True
-    request.data['text'] = "Some text!"
+    request.data['text'] = translate(request.data['photo'])
     request.data._mutable = False
     serializer = PhotoSerializer(data=request.data)
     if serializer.is_valid():
