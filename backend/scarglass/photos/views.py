@@ -4,6 +4,7 @@ from .models import PhotoModel
 from .serializer import PhotoSerializer
 # from .photo_test import img_to_pdf, img_to_txt2
 from .img_to_txt2 import translate
+import copy
 
 class PhotoList(generics.ListAPIView):
   queryset = PhotoModel.objects.all()
@@ -11,9 +12,8 @@ class PhotoList(generics.ListAPIView):
 
 class PhotoCreate(views.APIView):
   def post(self, request, format=None):
-    temp = request.data['photo']
+    temp = copy.deepcopy(request.data['photo'])
     text = translate(temp)
-    print(request.files)
     request.data._mutable = True
     request.data['text'] = text
     request.data._mutable = False
