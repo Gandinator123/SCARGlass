@@ -29,10 +29,15 @@ class PhotoCreate(views.APIView):
     
     elif img_type == '2':
       # QR
+      temp = copy.deepcopy(request.data['photo'])
+      text = translate(temp)
       img = cv2.imread(path)
       detect = cv2.QRCodeDetector()
-      value, points, straight_qrcode = detect.detectAndDecode(img)
-      print(value)
+      text, points, straight_qrcode = detect.detectAndDecode(img)
+      print(text)
+      request.data._mutable = True
+      request.data['text'] = text
+      request.data._mutable = False
 
     elif img_type == '3':
       # PDF
