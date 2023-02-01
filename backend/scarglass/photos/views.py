@@ -15,6 +15,7 @@ class PhotoCreate(views.APIView):
     request.data._mutable = True
     request.data['text'] = text
     request.data._mutable = False
+    print(request.data)
     serializer = PhotoSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
