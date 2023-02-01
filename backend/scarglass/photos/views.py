@@ -35,6 +35,8 @@ class PhotoCreate(views.APIView):
       detect = cv2.QRCodeDetector()
       text, points, straight_qrcode = detect.detectAndDecode(img)
       print(text)
+      print(points)
+      print(straight_qrcode)
       request.data._mutable = True
       request.data['text'] = text
       request.data._mutable = False
