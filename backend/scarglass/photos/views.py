@@ -13,7 +13,9 @@ class PhotoList(generics.ListAPIView):
 class PhotoCreate(views.APIView):
   def post(self, request, format=None):
     img_type = request.data['img_type']
-    print(img_type)
+    if img_type == 1:
+      print("EEE")
+      
     if img_type == 0:
       # NOTHING
       pass
