@@ -36,6 +36,7 @@ OPERATIONS = [
     ('Scanning...', scan_qr), # scan_qr()
     ('Saving...', save_text), # solve_equation()
     ('Hold still...', take_picture), # take_picture()
+    ('Finding phone...', error) # gunna be find_phone()
     ('Oops! Try again?', error),
 ]
         

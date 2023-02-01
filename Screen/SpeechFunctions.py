@@ -111,9 +111,12 @@ def text_to_function(text):
         # take_picture()
         return 4
 
+    elif 'find' in word_set and 'phone' in word_set:
+        # find_phone()
+        return 5
     else:
         # no_valid_function_error()
-        return 5
+        return 6
 
 def take_picture():
     camera = PiCamera()
@@ -190,6 +193,10 @@ def chat_gpt(text):
     print(response.text)
 
     return r
+
+
+def find_phone():
+    pass
 
 def error():
     time.sleep(2)
