@@ -10,7 +10,9 @@ class PhotoList(generics.ListAPIView):
 
 class PhotoCreate(views.APIView):
   def post(self, request, format=None):
+    request.data._mutable = True
     request.data['text'] = "Some text!"
+    request.data._mutable = False
     serializer = PhotoSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
