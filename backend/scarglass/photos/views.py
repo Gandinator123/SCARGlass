@@ -12,12 +12,14 @@ class PhotoList(generics.ListAPIView):
 
 class PhotoCreate(views.APIView):
   def post(self, request, format=None):
-    temp = copy.deepcopy(request.data['photo'])
-    text = translate(temp)
-    request.data._mutable = True
-    request.data['text'] = text
-    request.data._mutable = False
     print(request.data)
+    
+    # temp = copy.deepcopy(request.data['photo'])
+    # text = translate(temp)
+    # request.data._mutable = True
+    # request.data['text'] = text
+    # request.data._mutable = False
+
     serializer = PhotoSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
