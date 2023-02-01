@@ -13,7 +13,7 @@ def translate(image):
   text = text.replace('\n', ' ').replace('\r', ' ')
   print("in fr:", text)
 
-  to_eng = translator.translate(text, dest ='en')
+  to_eng = translator.translate(text, lang_tgt='en')
   out = to_eng.text.replace('\n', '').replace('\r', '')
 
   print("in english: ", out)
