@@ -4,7 +4,7 @@ import axios from "axios";
 
 let BASE_URL = "http://54.234.70.84:8000/";
 
-const ChatGPTresponses = () => {
+const QRScreen = () => {
   const [refreshing, setRefreshing] = useState(true);
   
     const [responses, setResponse] = useState([]);
@@ -25,8 +25,7 @@ const ChatGPTresponses = () => {
     const renderResponses = responses.map((response) => (
         <View key={response.id}>
         <Text style={styles.MainContainer}>
-        <Text style={styles.QuestionStyle}>Question: {response.question}?{'\n'}</Text>
-        <Text style={styles.Responsestyle}>ChatGPT: {response.response}</Text>
+        <Text style={styles.URLstyle}>URL {response.id}:  {response.question}?{'\n'}</Text>
         </Text>
         </View>      
     ));
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#CDD0D5",
      
     },
-      QuestionStyle: {
+      URLstyle: {
         borderRadius: 30,
         color: '#000',
         // Setting Up Background Color of Text component.
@@ -82,4 +81,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ChatGPTresponses
+export default QRScreen
