@@ -30,8 +30,9 @@ class PhotoCreate(views.APIView):
     
     elif img_type == '2':
       # QR
-      temp = copy.deepcopy(request.FILES['photo'])
-      img = cv2.imdecode(numpy.fromstring(temp.read(), numpy.uint8), cv2.IMREAD_UNCHANGED)
+      temp = request.FILES['photo']
+      print(temp)
+      img = cv2.imdecode(numpy.fromstring(temp.read(), numpy.uint8), cv2.IMREAD_COLOR)
       detect = cv2.QRCodeDetector()
       text, points, straight_qrcode = detect.detectAndDecode(img)
       print(text)
