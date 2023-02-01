@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, views, permissions, response, status
 from .models import PhotoModel
 from .serializer import PhotoSerializer
+from .photo_test import img_to_pdf, img_to_txt2
 
 class PhotoList(generics.ListAPIView):
   queryset = PhotoModel.objects.all()
