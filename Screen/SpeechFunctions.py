@@ -1,5 +1,6 @@
 import time
 import pyaudio
+import RPi.GPIO as GPIO
 import wave
 import speech_recognition as sr
 from ctypes import *
@@ -23,7 +24,7 @@ FORM_1 = pyaudio.paInt16
 CHANS=1
 SAMP_RATE = 44100
 CHUNK = 4096
-RECORD_SECS = 10     #record time
+RECORD_SECS = 3     #record time
 DEV_INDEX = 0
 WAV_OUTPUT_FILENAME = 'audio1.wav'
 LANGUAGES = {"french"}
@@ -32,12 +33,20 @@ def record_audio():
     audio = pyaudio.PyAudio()
     stream=audio.open(format = FORM_1,rate=SAMP_RATE,channels=CHANS, input_device_index = DEV_INDEX, input=True, frames_per_buffer=CHUNK)
     print("recording")
-    frames=[]  
+    frames=[]
+
     for ii in range(0,int((SAMP_RATE/CHUNK)*RECORD_SECS)):
         data=stream.read(CHUNK,exception_on_overflow = False)
         frames.append(data)
 
+    while True:
+        data=stream.read(CHUNK,exception_on_overflow = False)
+        frames.append(data)
+        if GPIO.input(18):
+            break
+
     print("finished recording")
+
     stream.stop_stream()
     stream.close()
     audio.terminate()
