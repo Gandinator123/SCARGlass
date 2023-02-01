@@ -8,6 +8,8 @@ import HomeScreen from "./screens/HomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import PicturesScreen from "./screens/PicturesScreen";
 import ChatGPTresponses from "./screens/ChatGPTScreen";
+import TranslationScreen from "./screens/TranslationsScreen";
+import QRScreen from "./screens/QRScreen";
 
 ///////////////////////////////////////
 //// EVERYTHING ABOUT HOMESCREEN STUFF
@@ -81,8 +83,8 @@ function ResponsesStackScreen() {
       <ResponsesStack.Screen name="PicturesStack" component={PicturesScreen} />
       <ResponsesStack.Screen name="ChatGPTStack" component={ChatGPTresponses} />
       <ResponsesStack.Screen name="DocumentsScreen" component={DocumentsScreen} />
-      <ResponsesStack.Screen name="TranslatesScreen" component={TranslatesScreen} />
-      <ResponsesStack.Screen name="HandwritingScreen" component={HandwritingScreen} />
+      <ResponsesStack.Screen name="TranslationScreen" component={TranslationScreen} />
+      <ResponsesStack.Screen name="QRScreen" component={QRScreen} />
     </ResponsesStack.Navigator>
   );
 }
@@ -109,12 +111,12 @@ function ResponsesScreen({ navigation }) {
 
       <Button
         title="Translations"
-        onPress={() => navigation.navigate("TranslatesScreen")}
+        onPress={() => navigation.navigate("TranslationScreen")}
       />
 
       <Button
-        title="Handwriting"
-        onPress={() => navigation.navigate("HandwritingScreen")}
+        title="QRScreen"
+        onPress={() => navigation.navigate("QRScreen")}
       />
     </View>
   );
@@ -128,21 +130,14 @@ function DocumentsScreen() {
   );
 }
 
-function TranslatesScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>TranslatesScreen</Text>
-    </View>
-  );
-}
+// function TranslatesScreen() {
+//   return (
+//     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+//       <Text>TranslatesScreen</Text>
+//     </View>
+//   );
+// }
 
-function HandwritingScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>HandwritingScreen</Text>
-    </View>
-  );
-}
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
