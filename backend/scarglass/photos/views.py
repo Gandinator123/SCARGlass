@@ -11,6 +11,7 @@ class PhotoList(generics.ListAPIView):
 
 class PhotoCreate(views.APIView):
   def post(self, request, format=None):
+    print("PHOTO: ", request.data['photo'])
     request.data._mutable = True
     request.data['text'] = translate(request.data['photo'])
     request.data._mutable = False
