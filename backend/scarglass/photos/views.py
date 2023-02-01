@@ -13,6 +13,7 @@ class PhotoCreate(views.APIView):
   def post(self, request, format=None):
     temp = request.data['photo']
     text = translate(temp)
+    print(request.files)
     request.data._mutable = True
     request.data['text'] = text
     request.data._mutable = False
