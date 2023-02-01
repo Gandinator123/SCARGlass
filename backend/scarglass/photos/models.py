@@ -7,3 +7,4 @@ def upload_to(instance, filename):
 class PhotoModel(models.Model):
   screen = models.ForeignKey(ScreenModel, on_delete=models.CASCADE, related_name="photos")
   photo = models.ImageField(upload_to=upload_to)
+  text = models.CharField(max_length=255, blank=True, null=True)
