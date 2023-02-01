@@ -1,6 +1,7 @@
 import time
 import busio
 import digitalio
+import RPi.GPIO as GPIO
 import board
 from PIL import Image, ImageDraw, ImageFont, ImageChops
 from adafruit_rgb_display import st7735
@@ -78,10 +79,10 @@ class Screen:
 
     def keypress_thread(self):
         while True:
-            state = input()
-            if state == 's':
-                print("scroll page")
+            if not GPIO.input(18):
+                print('start scroll')
                 self.global_state = 1
+                break
     
     def record_thread(self):
         record_audio()
