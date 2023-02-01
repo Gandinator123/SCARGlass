@@ -17,5 +17,5 @@ def translate(image):
   out = to_eng.text.replace('\n', '').replace('\r', '')
 
   print("in english: ", out)
-  return out
+  return "eee"
 
