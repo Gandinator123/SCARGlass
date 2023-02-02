@@ -24,7 +24,7 @@ function SettingsScreen() {
             <View>
               <Text style={styles.sectionTitle}>
                 {""}
-                Font size
+                Screen font size
               </Text>
             </View>
           </SafeAreaView>
@@ -42,7 +42,7 @@ function SettingsScreen() {
             <View>
               <Text style={styles.sectionTitle}>
                 {""}
-                Scroll speed
+                Screen scroll speed
               </Text>
             </View>
           </SafeAreaView>
@@ -59,7 +59,6 @@ function SettingsScreen() {
           <SafeAreaView>
             <View>
               <Text style={styles.sectionTitle}>
-                {""}
                 Some settings
               </Text>
             </View>
@@ -71,6 +70,7 @@ function SettingsScreen() {
               initial={0}
               onPress={(value) => console.log(value)}
               buttonMargin={10}
+
             />
           </View>
 
@@ -89,6 +89,7 @@ function SettingsScreen() {
               initial={0}
               onPress={(value) => console.log(value)}
               buttonMargin={10}
+              
             />
           </View>
 

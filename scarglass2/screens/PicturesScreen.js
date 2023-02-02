@@ -20,8 +20,8 @@ const PictureModal = ({photo}) => {
       <View style={styles.modalView}> 
         <Image
           style={{
-            width: 300,
-            height: 200,     
+            width: 350,
+            height: 250,
           }}
           source={{
             uri: photo['photo']
