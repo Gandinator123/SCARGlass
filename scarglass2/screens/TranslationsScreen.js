@@ -21,6 +21,7 @@ const Translationsmodal = ({photo}) => {
           style={{
             width: 350,
             height: 200,
+            marginBottom : 100
           }}
           source={{
             uri: photo['photo']
@@ -113,7 +114,6 @@ const TranslationScreen = () => {
       marginTop: 22,
     },
     modalView: {
-      marginTop: 60,
       margin: 0,
       alignItems: 'center',
       shadowColor: '#000',

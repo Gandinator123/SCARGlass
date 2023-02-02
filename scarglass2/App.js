@@ -239,7 +239,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: 'rgba(0,0,0,0)',
     borderRadius: 5,
-    padding: 20
+    padding: 25,
+    paddingHorizontal : 27
   },
   text: {
     aligalignItems: "center",
@@ -260,9 +261,10 @@ const styles = StyleSheet.create({
     height: 110,
   },
   icontext: {
-    paddingVertical: 10,
+    paddingVertical: 15,
     fontSize: 20,
-    fontFamily: 'Montserrat-Regular',
+    alignSelf : 'center',
+    fontWeight : 'bold'
   },
 });
 

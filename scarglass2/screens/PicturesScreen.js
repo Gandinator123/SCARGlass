@@ -108,10 +108,8 @@ const PicturesScreen = () => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 22,
     },
     modalView: {
-      marginTop: 60,
       margin: 0,
       alignItems: 'center',
       shadowColor: '#000',
@@ -125,7 +123,6 @@ const PicturesScreen = () => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 22,
       backgroundColor: 'rgba(52, 52, 52, 0.8)'
     },
   });
