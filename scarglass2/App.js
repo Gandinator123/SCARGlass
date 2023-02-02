@@ -89,17 +89,17 @@ function ResponsesStackScreen() {
   );
 }
 
-
+// style={{ flex: 1, justifyContent: "space-evenly", alignItems: "center"}}
 //stack components
 function ResponsesScreen({ navigation }) {
   return (
     <View
-      style={{ flex: 1, justifyContent: "space-evenly", alignItems: "center"}}
+      style={{ flexDirection: 'row',  flexWrap: "wrap", justifyContent: "flex-start", alignItems: "baseline", margin: 20}}
     >
       <Button
         title="Pictures"
         onPress={() => navigation.navigate("PicturesStack")}
-        image='./images/glasses_318-616661.png'
+        image='./images/picture.png'
       />
       <Button
         title="ChatGPT"
@@ -122,7 +122,7 @@ function ResponsesScreen({ navigation }) {
       <Button
         title="QRScreen"
         onPress={() => navigation.navigate("QRScreen")}
-        image='./images/qrcode.png'
+        image="./images/qrcode.png"
       />
     </View>
   );
@@ -149,29 +149,29 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 //////////////////////////////
 // Button styling
-function Button({ onPress, title }) {
-  // const { onPress, title = 'Save' } = props;
-  return (
-    <Pressable style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
-    </Pressable>
-  );
-}
-
-// function Button({ onPress, title, image }) {
+// function Button({ onPress, title }) {
 //   // const { onPress, title = 'Save' } = props;
-//   console.log(image)
 //   return (
-//     <View style={styles.button2}>
-//     <TouchableOpacity onPress={onPress}>
-//         <Image
-//         style={styles.deviceimage}
-//           source={image}
-//         />
-//       </TouchableOpacity>
-//     </View>
+//     <Pressable style={styles.button} onPress={onPress}>
+//       <Text style={styles.text}>{title}</Text>
+//     </Pressable>
 //   );
 // }
+
+function Button({ onPress, title, image }) {
+  // const { onPress, title = 'Save' } = props;
+  console.log(image)
+  return (
+    <View style={styles.button2}>
+    <TouchableOpacity onPress={onPress}>
+        <Image
+        style={styles.deviceimage}
+          source={require('./images/picture.png')}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -185,12 +185,9 @@ const styles = StyleSheet.create({
   },
   button2: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: "space-evenly",
-    backgroundColor: '#485a96',
     borderWidth: 0.5,
-    borderColor: '#fff',
-    height: 40,
+    borderColor: 'rgba(0,0,0,0)',
     borderRadius: 5,
     margin: 5,
   },
