@@ -94,35 +94,35 @@ function ResponsesStackScreen() {
 function ResponsesScreen({ navigation }) {
   return (
     <View
-      style={{ flexDirection: 'row',  flexWrap: "wrap", justifyContent: "flex-start", alignItems: "baseline", margin: 20, paddingTop: 50}}
+      style={{ flexDirection: 'row',  flexWrap: "wrap", justifyContent: "flex-start", alignItems: "baseline", margin: 20, paddingTop: 30}}
     >
       <Button
         title="Pictures"
         onPress={() => navigation.navigate("PicturesStack")}
-        image='./images/picture.png'
+        image='0' 
       />
       <Button
         title="ChatGPT"
         onPress={() => navigation.navigate("ChatGPTStack")}
-        image='./images/chatgpt.png'
+        image='1'
       />
 
       <Button
         title="Documents"
         onPress={() => navigation.navigate("DocumentsScreen")}
-        image='./images/documents.png'
+        image='2'
       />
 
       <Button
         title="Translations"
         onPress={() => navigation.navigate("TranslationScreen")}
-        image='./images/translate.png'
+        image='3'
       />
 
       <Button
         title="QRScreen"
         onPress={() => navigation.navigate("QRScreen")}
-        image="./images/qrcode.png"
+        image='4'
       />
     </View>
   );
@@ -161,16 +161,66 @@ const Stack = createNativeStackNavigator();
 function Button({ onPress, title, image }) {
   // const { onPress, title = 'Save' } = props;
   console.log(image)
-  return (
-    <View style={styles.button2}>
-    <TouchableOpacity onPress={onPress}>
-        <Image
-        style={styles.deviceimage}
-          source={require('./images/picture.png')}
-        />
-      </TouchableOpacity>
-    </View>
-  );
+
+  switch(image){
+    case '0':  return (
+      <View style={styles.button2}>
+      <TouchableOpacity onPress={onPress}>
+          <Image
+          style={styles.deviceimage}
+            source={require('./images/picture.png')}
+          />
+        </TouchableOpacity>
+        <Text style={styles.icontext}>Pictures</Text>
+      </View>
+    );
+    case '1':  return (
+      <View style={styles.button2}>
+      <TouchableOpacity onPress={onPress}>
+          <Image
+          style={styles.deviceimage}
+            source={require('./images/chatgpt.png')}
+          />
+        </TouchableOpacity>
+        <Text style={styles.icontext}>ChatGPT</Text>
+      </View>
+    );
+    case '2':  return (
+      <View style={styles.button2}>
+      <TouchableOpacity onPress={onPress}>
+          <Image
+          style={styles.deviceimage}
+            source={require('./images/documents.png')}
+          />
+        </TouchableOpacity>
+        <Text style={styles.icontext}>Documents</Text>
+      </View>
+    );
+    case '3':  return (
+      <View style={styles.button2}>
+      <TouchableOpacity onPress={onPress}>
+          <Image
+          style={styles.deviceimage}
+            source={require('./images/translate.png')}
+          />
+        </TouchableOpacity>
+        <Text style={styles.icontext}>Translations</Text>
+      </View>
+    );
+    case '4':  return (
+      <View style={styles.button2}>
+      <TouchableOpacity onPress={onPress}>
+          <Image
+          style={styles.deviceimage}
+            source={require('./images/qrcode.png')}
+          />
+        </TouchableOpacity>
+        <Text style={styles.icontext}>QR codes</Text>
+      </View>
+    );
+  
+  }
+  
 }
 
 const styles = StyleSheet.create({
@@ -184,12 +234,12 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   button2: {
-    flexDirection: 'row',
-    justifyContent: "space-evenly",
+    flexDirection: 'column',
+    justifyContent: "center",
     borderWidth: 0.5,
     borderColor: 'rgba(0,0,0,0)',
     borderRadius: 5,
-    padding: 10
+    padding: 20
   },
   text: {
     aligalignItems: "center",
@@ -206,8 +256,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   deviceimage: {
-    width: 150,
-    height: 150,
+    width: 110,
+    height: 110,
+  },
+  icontext: {
+    paddingVertical: 10,
+    fontSize: 20,
+    fontFamily: 'Montserrat-Regular',
   },
 });
 
