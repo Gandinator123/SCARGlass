@@ -94,7 +94,7 @@ function ResponsesStackScreen() {
 function ResponsesScreen({ navigation }) {
   return (
     <View
-      style={{ flexDirection: 'row',  flexWrap: "wrap", justifyContent: "flex-start", alignItems: "baseline", margin: 20}}
+      style={{ flexDirection: 'row',  flexWrap: "wrap", justifyContent: "flex-start", alignItems: "baseline", margin: 20, paddingTop: 50}}
     >
       <Button
         title="Pictures"
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: 'rgba(0,0,0,0)',
     borderRadius: 5,
-    margin: 5,
+    padding: 10
   },
   text: {
     aligalignItems: "center",
@@ -206,8 +206,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   deviceimage: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
   },
 });
 
