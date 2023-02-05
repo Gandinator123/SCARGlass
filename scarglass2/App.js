@@ -9,7 +9,10 @@ import SettingsScreen from "./screens/SettingsScreen";
 import PicturesScreen from "./screens/PicturesScreen";
 import ChatGPTresponses from "./screens/ChatGPTScreen";
 import TranslationScreen from "./screens/TranslationsScreen";
+import LoginScreenPage from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 import QRScreen from "./screens/QRScreen";
+import DocumentsScreen from "./screens/DocumentsScreen";
 
 ///////////////////////////////////////
 //// EVERYTHING ABOUT HOMESCREEN STUFF
@@ -128,13 +131,13 @@ function ResponsesScreen({ navigation }) {
   );
 }
 
-function DocumentsScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>DocumentsScreen</Text>
-    </View>
-  );
-}
+// function DocumentsScreen() {
+//   return (
+//     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+//       <Text>DocumentsScreen</Text>
+//     </View>
+//   );
+// }
 
 // function TranslatesScreen() {
 //   return (
@@ -145,8 +148,6 @@ function DocumentsScreen() {
 // }
 
 
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
 //////////////////////////////
 // Button styling
 // function Button({ onPress, title }) {
@@ -271,33 +272,76 @@ const styles = StyleSheet.create({
 //////////////////////////////
 //////////////////////////////
 
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+const MainApp = () => {
+  return(
+    <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+
+        if (route.name === "Home") {
+          iconName = focused ? "ios-home" : "ios-home-outline";
+        } else if (route.name === "Responses") {
+          iconName = focused ? "ios-albums" : "ios-albums-outline";
+        } else if (route.name === "Settings") {
+          iconName = focused ? "ios-settings" : "ios-settings-outline";
+        }
+
+        // You can return any component that you like here!
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: "black",
+      tabBarInactiveTintColor: "gray",
+    })}
+  >
+    <Tab.Screen name="Home" component={HomeStackScreen} />
+    <Tab.Screen name="Responses" component={ResponsesStackScreen} />
+    <Tab.Screen name="Settings" component={SettingsStackScreen} />
+  </Tab.Navigator>)
+};
+
+const Auth = () => {
+  // Stack Navigator for Login and Sign up Screen
+  return (
+    <Stack.Navigator initialRouteName="LoginScreenPage">
+      <Stack.Screen
+        name="LoginScreenPage"
+        component={LoginScreenPage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="RegisterScreen"
+        component={RegisterScreen}
+        options={{
+          title: 'Register', //Set Header Title
+          headerTintColor: '#000000', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === "Home") {
-              iconName = focused ? "ios-home" : "ios-home-outline";
-            } else if (route.name === "Responses") {
-              iconName = focused ? "ios-albums" : "ios-albums-outline";
-            } else if (route.name === "Settings") {
-              iconName = focused ? "ios-settings" : "ios-settings-outline";
-            }
-
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: "black",
-          tabBarInactiveTintColor: "gray",
-        })}
-      >
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Responses" component={ResponsesStackScreen} />
-        <Tab.Screen name="Settings" component={SettingsStackScreen} />
-      </Tab.Navigator>
+    <Stack.Navigator initialRouteName="LoginPage">
+    <Stack.Screen
+          name="Auth"
+          component={Auth}
+          options={{headerShown: false}}
+      />
+    <Stack.Screen
+      name = "MainApp"
+      component={MainApp}
+      options={{headerShown: false}}
+      />
+    </Stack.Navigator>
     </NavigationContainer>
   );
 }
