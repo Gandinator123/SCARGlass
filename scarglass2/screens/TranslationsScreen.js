@@ -28,7 +28,7 @@ const Translationsmodal = ({photo}) => {
           }}
         />
         <ScrollView style={styles.translationbox}> 
-        <Text style={styles.translationfont}>Translation: {photo['text']} </Text>
+        <Text style={styles.translationfont}>{photo['text']} </Text>
         </ScrollView> 
       </View>
         <TouchableOpacity onPress={()=> setModalVisible(false)} style={styles.overlay}> 

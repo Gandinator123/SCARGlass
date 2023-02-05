@@ -39,7 +39,8 @@ const PictureModal = ({photo}) => {
             width: 91,
             height: 91,
             resizeMode: 'cover',
-            margin: 2
+            margin: 2,
+            borderRadius: 3
           }}
           source={{
             uri: photo['photo']

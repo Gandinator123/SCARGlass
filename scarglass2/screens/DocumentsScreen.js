@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Text, View, StyleSheet, Pressable, Image, ScrollView, TouchableOpacity, Modal, RefreshControl} from "react-native";
+import { Text, View, StyleSheet, Pressable, Image, ScrollView, TouchableOpacity, Modal, RefreshControl, Linking} from "react-native";
 import axios from "axios";
 
 let BASE_URL = "http://54.234.70.84:8000/";
@@ -9,6 +9,7 @@ const Documentsmodal = ({photo}) => {
 
   console.log("PHOTO: ", photo)
   let translation = photo['text'];
+  const source = { uri: 'http://samples.leanpub.com/thereactnativebook-sample.pdf', cache: true };
   return (
     <View>
       <Modal
@@ -28,7 +29,7 @@ const Documentsmodal = ({photo}) => {
           }}
         />
         <ScrollView style={styles.translationbox}> 
-        <Text style={styles.translationfont}>Translation: {photo['text']} </Text>
+       
         </ScrollView> 
       </View>
         <TouchableOpacity onPress={()=> setModalVisible(false)} style={styles.overlay}> 
@@ -36,13 +37,14 @@ const Documentsmodal = ({photo}) => {
           </View>
         </TouchableOpacity>
       </Modal>
-      <TouchableOpacity onPress={()=> setModalVisible(true)}>
+      <TouchableOpacity onPress={()=> {Linking.openURL('http://samples.leanpub.com/thereactnativebook-sample.pdf');}}>
         <Image
           style={{
-            width: 91,
-            height: 91,
+            width: 185,
+            height: 181,
             resizeMode: 'cover',
-            margin: 2
+            margin: 2,
+            borderRadius: 5,
           }}
           source={{
             uri: photo['photo']
@@ -145,7 +147,7 @@ const DocumentsScreen = () => {
         margin : 15,
         backgroundColor: "rgba(245, 235, 238, 0.7)",
         alignSelf : 'baseline'
-    }
+    },
   });
 
 export default DocumentsScreen
