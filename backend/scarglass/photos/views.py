@@ -11,6 +11,9 @@ from PIL import Image
 import imutils
 from skimage.filters import threshold_local
 from imutils.perspective import four_point_transform
+import sys
+from io import BytesIO
+from django.core.files import File
 
 class PhotoList(generics.ListAPIView):
   
@@ -85,9 +88,14 @@ class PhotoCreate(views.APIView):
 
       out = imutils.resize(warped, height = 650)
 
+      imgio = BytesIO()
+      big_img.save(imgio, 'JPEG', quality=85)
+      
       request.data._mutable = True
-      request.data['photo'] = out
+      request.data['photo'] = File(imgio, name=big_img.name)
       request.data._mutable = False
+
+      self.photo.save()
 
 
     serializer = PhotoSerializer(data=request.data)
