@@ -60,7 +60,7 @@ class PhotoCreate(views.APIView):
     elif img_type == '3':
       # PDF
       temp = copy.deepcopy(request.data['photo'])
-      print(temp)
+      print(temp.name)
       big_img = cv2.imdecode(numpy.fromstring(temp.read(), numpy.uint8), cv2.IMREAD_COLOR)
       ratio = big_img.shape[0] / 500.0
       org = big_img.copy()
@@ -92,7 +92,7 @@ class PhotoCreate(views.APIView):
       # big_img.save(imgio, 'JPEG', quality=85)
       
       request.data._mutable = True
-      request.data['photo'] = File(out, name=big_img.name)
+      request.data['photo'] = File(out, name=)
       request.data._mutable = False
 
       self.photo.save()
