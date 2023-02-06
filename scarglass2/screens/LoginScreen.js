@@ -1,21 +1,4 @@
-import LoginScreen from "react-native-login-screen";
-import axios from "axios";
-
-let BASE_URL = "http://54.234.70.84:8000/";
-
-// const LoginScreenPage = ({navigation}) => {
-//     return(
-//     <LoginScreen
-//         logoImageSource={require("./../assets/scarglasstext.png")}
-//         onLoginPress={(navigation) => {}}
-//         onSignupPress={() => {}}
-//         onEmailChange={(email: string) => {}}
-//         onPasswordChange={(password: string) => {}}
-//     ></LoginScreen>
-//     )
-// };
-// export default LoginScreen;
-import React, {useState, createRef} from 'react';
+import React, { useState, createRef, useEffect } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -26,71 +9,69 @@ import {
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
-} from 'react-native';
+} from "react-native";
 
-// import AsyncStorage from '@react-native-community/async-storage';
+import LoginScreen from "react-native-login-screen";
+import axios from "axios";
 
+let BASE_URL = "http://54.234.70.84:8000/";
 
-const LoginScreenPage = ({navigation}) => {
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const storeData = async (key, value) => {
+  try {
+    await AsyncStorage.setItem(key, value);
+  } catch (e) {
+    // saving error
+  }
+};
+
+const LoginScreenPage = ({ navigation }) => {
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errortext, setErrortext] = useState('');
+  const [errortext, setErrortext] = useState("");
 
   const passwordInputRef = createRef();
 
   const handleSubmitPress = () => {
-    setErrortext('');
+    setErrortext("");
     if (!userEmail) {
-      alert('Please fill Email');
+      alert("Please fill Email");
       return;
     }
     if (!userPassword) {
-      alert('Please fill Password');
+      alert("Please fill Password");
       return;
     }
     setLoading(true);
-    let dataToSend = {email: userEmail, password: userPassword};
-    let formBody = [];
-    for (let key in dataToSend) {
-      let encodedKey = encodeURIComponent(key);
-      let encodedValue = encodeURIComponent(dataToSend[key]);
-      formBody.push(encodedKey + '=' + encodedValue);
-    }
-    formBody = formBody.join('&');
+    let dataToSend = { email: userEmail, password: userPassword };
 
-    navigation.replace('MainApp');
-
-    // fetch('http://localhost:3000/api/user/login', {
-    //   method: 'POST',
-    //   body: formBody,
-    //   headers: {
-    //     //Header Defination
-    //     'Content-Type':
-    //     'application/x-www-form-urlencoded;charset=UTF-8',
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
-    //     //Hide Loader
-    //     setLoading(false);
-    //     console.log(responseJson);
-    //     // If server response message same as Data Matched
-    //     if (responseJson.status === 'success') {
-    //       AsyncStorage.setItem('user_id', responseJson.data.email);
-    //       console.log(responseJson.data.email);
-    //       navigation.replace('DrawerNavigationRoutes');
-    //     } else {
-    //       setErrortext(responseJson.msg);
-    //       console.log('Please check your email id or password');
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     //Hide Loader
-    //     setLoading(false);
-    //     console.error(error);
-    //   });
+    axios
+      .post(BASE_URL + "users/signin/", dataToSend)
+      .then((response) => {
+        console.log(response);
+        storeData("refresh", response.data.refresh).then(() => {
+          storeData("access", response.data.access).then(() => {
+            setLoading(false);
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
+
+  useEffect(() => {
+    async function fetchData(key) {
+      const access = await AsyncStorage.getItem(key);
+      if (access) {
+        navigation.replace("MainApp");
+      }
+    }
+    fetchData("access");
+  }, []);
 
   return (
     <View style={styles.mainBody}>
@@ -98,17 +79,18 @@ const LoginScreenPage = ({navigation}) => {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
           flex: 1,
-          justifyContent: 'center',
-          alignContent: 'center',
-        }}>
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
         <View>
           <KeyboardAvoidingView enabled>
-            <View style={{alignItems: 'center'}}>
+            <View style={{ alignItems: "center" }}>
               <Image
-                source={require('./../assets/scarglasstext.png')}
+                source={require("./../assets/scarglasstext.png")}
                 style={{
                   height: 200,
-                  resizeMode: 'contain',
+                  resizeMode: "contain",
                   margin: 30,
                 }}
               />
@@ -116,17 +98,14 @@ const LoginScreenPage = ({navigation}) => {
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                onChangeText={(UserEmail) =>
-                  setUserEmail(UserEmail)
-                }
+                onChangeText={(UserEmail) => setUserEmail(UserEmail)}
                 placeholder="Enter Email"
                 placeholderTextColor="#8b9cb5"
                 autoCapitalize="none"
                 keyboardType="email-address"
                 returnKeyType="next"
                 onSubmitEditing={() =>
-                  passwordInputRef.current &&
-                  passwordInputRef.current.focus()
+                  passwordInputRef.current && passwordInputRef.current.focus()
                 }
                 underlineColorAndroid="#f000"
                 blurOnSubmit={false}
@@ -135,9 +114,7 @@ const LoginScreenPage = ({navigation}) => {
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                onChangeText={(UserPassword) =>
-                  setUserPassword(UserPassword)
-                }
+                onChangeText={(UserPassword) => setUserPassword(UserPassword)}
                 placeholder="Enter Password" //12345
                 placeholderTextColor="#8b9cb5"
                 keyboardType="default"
@@ -149,20 +126,20 @@ const LoginScreenPage = ({navigation}) => {
                 returnKeyType="next"
               />
             </View>
-            {errortext != '' ? (
-              <Text style={styles.errorTextStyle}>
-                {errortext}
-              </Text>
+            {errortext != "" ? (
+              <Text style={styles.errorTextStyle}>{errortext}</Text>
             ) : null}
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
-              onPress={handleSubmitPress}>
+              onPress={handleSubmitPress}
+            >
               <Text style={styles.buttonTextStyle}>LOGIN</Text>
             </TouchableOpacity>
             <Text
               style={styles.registerTextStyle}
-              onPress={() => navigation.navigate('RegisterScreen')}>
+              onPress={() => navigation.navigate("RegisterScreen")}
+            >
               New Here? Register
             </Text>
           </KeyboardAvoidingView>
@@ -175,11 +152,11 @@ const LoginScreenPage = ({navigation}) => {
 const styles = StyleSheet.create({
   mainBody: {
     flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
+    justifyContent: "center",
+    alignContent: "center",
   },
   SectionStyle: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 50,
     marginTop: 20,
     marginLeft: 35,
@@ -187,12 +164,12 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonStyle: {
-    backgroundColor: '#000000',
+    backgroundColor: "#000000",
     borderWidth: 0,
-    color: '#FFFFFF',
-    borderColor: '#7DE24E',
+    color: "#FFFFFF",
+    borderColor: "#7DE24E",
     height: 50,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 30,
     marginLeft: 35,
     marginRight: 35,
@@ -200,36 +177,33 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   buttonTextStyle: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     paddingVertical: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 16,
   },
   inputStyle: {
     flex: 1,
-    color: 'black',
+    color: "black",
     paddingLeft: 15,
     paddingRight: 15,
     borderWidth: 1,
     borderRadius: 30,
-    borderColor: '#dadae8',
+    borderColor: "#dadae8",
   },
   registerTextStyle: {
-    color: 'black',
-    textAlign: 'center',
-    fontWeight: 'bold',
+    color: "black",
+    textAlign: "center",
+    fontWeight: "bold",
     fontSize: 14,
-    alignSelf: 'center',
+    alignSelf: "center",
     padding: 10,
   },
   errorTextStyle: {
-    color: 'red',
-    textAlign: 'center',
+    color: "red",
+    textAlign: "center",
     fontSize: 14,
   },
 });
 
-
-
-
-export default LoginScreenPage
+export default LoginScreenPage;

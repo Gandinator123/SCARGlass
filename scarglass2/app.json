@@ -15,9 +15,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -35,6 +33,6 @@
         "projectId": "a294e458-5382-4feb-b13a-fdd85973b9f0"
       }
     },
-    "owner": "chris31243"
+    "owner": "gandinator123"
   }
 }
