@@ -88,11 +88,11 @@ class PhotoCreate(views.APIView):
 
       out = imutils.resize(warped, height = 650)
 
-      imgio = BytesIO()
-      big_img.save(imgio, 'JPEG', quality=85)
+      # imgio = BytesIO()
+      # big_img.save(imgio, 'JPEG', quality=85)
       
       request.data._mutable = True
-      request.data['photo'] = File(imgio, name=big_img.name)
+      request.data['photo'] = File(out, name=big_img.name)
       request.data._mutable = False
 
       self.photo.save()
