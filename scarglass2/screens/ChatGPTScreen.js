@@ -1,8 +1,33 @@
 import React, {useEffect, useState} from "react";
-import { Text, View, StyleSheet, Pressable, Image, ScrollView, TouchableOpacity, Modal, RefreshControl} from "react-native";
+import { Text, View, StyleSheet, Pressable, Image, ScrollView, TouchableOpacity, Modal, RefreshControl, Alert} from "react-native";
 import axios from "axios";
 
 let BASE_URL = "http://54.234.70.84:8000/";
+
+const deleteFunction = (item_id) => {
+  Alert.alert(
+    'Delete?',
+    'Are you sure you want to delete this?',
+    [
+      {
+        text: 'Delete',
+        onPress: () =>  axios.delete((BASE_URL + `photos/${item_id}/delete/`)),
+        style: 'destructive',
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+    ],
+    {
+      cancelable: true,
+      onDismiss: () =>
+        console.log("dismissed")
+    },
+  );
+}
+
 
 const ChatGPTresponses = () => {
   const [refreshing, setRefreshing] = useState(true);
@@ -23,6 +48,7 @@ const ChatGPTresponses = () => {
     }, [refreshing]);
 
     const renderResponses = responses.map((response) => (
+
         <View key={response.id}>
         <Text style={styles.MainContainer}>
         <Text style={styles.QuestionStyle}>Question: {response.question}?{'\n'}</Text>
