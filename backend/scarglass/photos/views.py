@@ -95,8 +95,6 @@ class PhotoCreate(views.APIView):
       request.data['photo'] = File(out, name=temp.name)
       request.data._mutable = False
 
-      self.photo.save()
-
 
     serializer = PhotoSerializer(data=request.data)
     if serializer.is_valid():
