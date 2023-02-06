@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
-import { Text, View, StyleSheet, Pressable, Image, ScrollView, TouchableOpacity, Modal, RefreshControl} from "react-native";
+import { Text, View, StyleSheet, Pressable, Image, ScrollView, TouchableOpacity, Modal, RefreshControl, Linking} from "react-native";
 import axios from "axios";
 
 let BASE_URL = "http://54.234.70.84:8000/";
 
-
-const PictureModal = ({photo}) => {
+const Documentsmodal = ({photo}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   console.log("PHOTO: ", photo)
-      
+  let translation = photo['text'];
+  const source = { uri: 'http://samples.leanpub.com/thereactnativebook-sample.pdf', cache: true };
   return (
     <View>
       <Modal
@@ -21,26 +21,30 @@ const PictureModal = ({photo}) => {
         <Image
           style={{
             width: 350,
-            height: 250,
+            height: 200,
+            marginBottom : 100
           }}
           source={{
             uri: photo['photo']
           }}
         />
+        <ScrollView style={styles.translationbox}> 
+       
+        </ScrollView> 
       </View>
         <TouchableOpacity onPress={()=> setModalVisible(false)} style={styles.overlay}> 
           <View>
           </View>
         </TouchableOpacity>
       </Modal>
-      <TouchableOpacity onPress={()=> setModalVisible(true)}>
+      <TouchableOpacity onPress={()=> {Linking.openURL('http://samples.leanpub.com/thereactnativebook-sample.pdf');}}>
         <Image
           style={{
-            width: 91,
-            height: 91,
+            width: 185,
+            height: 181,
             resizeMode: 'cover',
             margin: 2,
-            borderRadius: 3
+            borderRadius: 5,
           }}
           source={{
             uri: photo['photo']
@@ -51,7 +55,7 @@ const PictureModal = ({photo}) => {
 )
 }
 
-const PicturesScreen = () => {
+const DocumentsScreen = () => {
   const [refreshing, setRefreshing] = useState(true);
 
   const [photos, setPhotos] = useState([]);
@@ -73,7 +77,7 @@ const PicturesScreen = () => {
 
 
     const renderPhotos = photos.map((photo) => (
-      <PictureModal photo={photo} key={photo.id} />
+      <Documentsmodal photo={photo} key={photo.id} />
     ));
 
     return (
@@ -109,6 +113,7 @@ const PicturesScreen = () => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+      marginTop: 22,
     },
     modalView: {
       margin: 0,
@@ -123,47 +128,26 @@ const PicturesScreen = () => {
       elevation: 5,
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
       backgroundColor: 'rgba(52, 52, 52, 0.8)'
+    },
+    translationfont : {
+      fontSize : 20,
+      fontWeight : 'bold',
+      color : 'white',
+      paddingTop : 0,
+      paddingHorizontal : 10,
+      alignSelf : 'baseline'
+    },
+    translationbox : {
+        position: 'absolute',
+        top: 475,
+        bottom: 2,
+        paddingVertical: 2,
+        borderRadius: 20,
+        margin : 15,
+        backgroundColor: "rgba(245, 235, 238, 0.7)",
+        alignSelf : 'baseline'
     },
   });
 
-export default PicturesScreen
-
-
-
-
-// const [images, setImages] = useState([]);
-
-// useEffect(() => {
-//   let temp_images = images;
-
-//   photos.map((photo) => {
-//     obj = {'source': {}}
-//     obj['source']['uri'] = photo['photo']
-//     obj['width'] = 100
-//     obj['height'] = 100
-//     temp_images.push(obj)
-//     }
-//   )
-
-//   setImages([...temp_images]);
-
-// }, [photos])
-
-// useEffect(() => {
-//   console.log("IMAGES: ", images);
-// }, [images])
-
-// return (
-//   <ScrollView>
-//   <View style={styles.background}>
-//   <ImageView
-// images={images}
-// imageIndex={0}
-// isVisible={false}
-//  renderFooter={(currentImage) => (<View><Text>My footer</Text></View>)}
-// />
-//   </View>
-//   </ScrollView>
-// );
+export default DocumentsScreen
