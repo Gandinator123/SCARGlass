@@ -7,6 +7,10 @@ from .img_to_txt2 import translate
 import copy
 import cv2
 import numpy
+from PIL import Image
+import imutils
+from skimage.filters import threshold_local
+from imutils.perspective import four_point_transform
 
 class PhotoList(generics.ListAPIView):
   
