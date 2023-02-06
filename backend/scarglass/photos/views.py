@@ -9,7 +9,15 @@ import cv2
 import numpy
 
 class PhotoList(generics.ListAPIView):
-  queryset = PhotoModel.objects.all()
+  
+  def get_queryset(self):
+    queryset = PhotoModel.objects.all()
+    img_type = self.request.query_params.get('img_type')
+    if img_type:
+      queryset = queryset.filter(img_type=img_type)
+
+    return queryset
+
   serializer_class = PhotoSerializer
 
 class PhotoCreate(views.APIView):
