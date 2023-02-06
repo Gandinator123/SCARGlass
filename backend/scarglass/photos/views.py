@@ -92,7 +92,7 @@ class PhotoCreate(views.APIView):
       # big_img.save(imgio, 'JPEG', quality=85)
       
       request.data._mutable = True
-      request.data['photo'] = File(out, name=)
+      request.data['photo'] = File(out, name=temp.name)
       request.data._mutable = False
 
       self.photo.save()
