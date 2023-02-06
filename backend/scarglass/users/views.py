@@ -1,5 +1,5 @@
 from .models import UserModel
-from rest_framework import generics, permissions, response, status
+from rest_framework import generics, permissions, response, status, views
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import RegisterSerializer, UserSerializer
 from django.contrib.auth import authenticate
