@@ -66,11 +66,14 @@ class Screen:
 
         # API SCREEN DATA
         url = BASE_URL + 'screens/1/'
-        response = requests.get(url)
-        x = response.json()
-        self.background_color = (x['background_blue'], x['background_green'], x['background_red']) # BGR!
-        font_color = (x['font_blue'], x['font_green'], x['font_red']) # BGR!
-        time_format, date_format, day_format = x['time_format'], x['date_format'], x['day_format']
+        # response = requests.get(url)
+        #x = response.json()
+        #self.background_color = (x['background_blue'], x['background_green'], x['background_red']) # BGR!
+        # font_color = (x['font_blue'], x['font_green'], x['font_red']) # BGR!
+        # time_format, date_format, day_format = x['time_format'], x['date_format'], x['day_format']
+        self.background_color = (255, 255, 255) # BGR!
+        font_color = (0, 0, 0) # BGR!
+        time_format, date_format, day_format = 0, 0, 0
 
         # FONT
         self.fontSize = 12
