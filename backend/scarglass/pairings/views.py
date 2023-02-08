@@ -5,6 +5,9 @@ from django.db.models import Q
 from datetime import date, timedelta
 
 class PairingList(generics.ListAPIView):
+  queryset = PairingModel.objects.all()
+  serializer_class = PairingSerializer
+  
   def filter_queryset(self, queryset):
     pair = self.request.query_params.get('pair')
     five_minutes_ago = django.utils.timezone.now() + datetime.timedelta(minutes=-5)
