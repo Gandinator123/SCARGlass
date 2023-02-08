@@ -13,7 +13,6 @@ class UserList(generics.ListAPIView):
 
   def filter_queryset(self, queryset):
     token = self.request.user
-    print(token)
     if token is not None:
       queryset = queryset.filter(user=token)
     return queryset
