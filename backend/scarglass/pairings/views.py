@@ -14,7 +14,7 @@ class PairingList(generics.ListAPIView):
 
   def filter_queryset(self, queryset):
     pair = self.request.query_params.get('pair')
-    five_minutes_ago = timezone.now() + timedelta(minutes=-30)
+    five_minutes_ago = timezone.now() + timedelta(hours=-30) # TODO seconds = -30
     if pair == 'true':
       queryset = queryset.filter(Q(paired=False) & Q(date__gte = five_minutes_ago))
     return queryset
