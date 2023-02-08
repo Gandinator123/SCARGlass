@@ -18,11 +18,14 @@ class RegisterSerializer(serializers.ModelSerializer):
     return user
 
 class UserSerializer(serializers.ModelSerializer):
+  screens = serializers.RelatedField(source='ScreenModel', read_only=True)
+
   class Meta:
     model = UserModel
     fields = (
       'id',
       'email',
       'name',
-      'date'
+      'date',
+      'screens',
     )
