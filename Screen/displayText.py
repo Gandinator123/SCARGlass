@@ -42,7 +42,7 @@ OPERATIONS = [
 class Screen:
     def __init__(self):
         # GLOBALS
-        self.global_state = 0
+        self.global_state = -2
         key_t = threading.Thread(target=self.keypress_thread)
         key_t.start()
 
@@ -92,7 +92,18 @@ class Screen:
     def keypress_thread(self):
         while True:
             if not GPIO.input(18):
-                self.global_state = 1
+                if self.global_state == -2:
+                    curr = time.time()
+                    do = True
+                    while time.time()-curr < 1.5:
+                       if GPIO.input(18):
+                           do = False
+                           break
+                    if do:
+                        self.global_state = -1
+                else:
+                    self.global_state = 1
+            
     
     def record_thread(self):
         record_audio()
@@ -209,9 +220,27 @@ class Screen:
             self.scroll(op)
         
         self.global_state = 0
+    
+    def turnOn(self):
+        self.preProcess()
+        text = "hello friend!"
+        (font_width, font_height) = self.font.getsize(text)
+        self.draw.text(
+                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                text,
+                font=self.font,
+                fill=self.fontColor,
+            )
+        self.postProcess()
+        self.global_state = 0
+
 
     def run(self):
         while True:
+            # if self.global_state == -2:
+            #     screen.offState()
+            if self.global_state == -1:
+                screen.turnOn()
             if self.global_state == 0:
                 screen.homePage()
             elif self.global_state == 1:
