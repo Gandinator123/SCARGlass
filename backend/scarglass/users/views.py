@@ -11,6 +11,17 @@ class UserList(generics.ListAPIView):
   serializer_class = UserSerializer
   queryset = UserModel.objects.all()
 
+  def filter_queryset(self, queryset):
+    token = self.request.user.id
+    if token is not None:
+      queryset = queryset.filter(user=token)
+    return queryset
+
+  def list(self, request):
+    queryset = self.filter_queryset(self.get_queryset())
+    serializer = self.get_serializer(queryset, many=True)
+    return response.Response(serializer.data)
+
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = UserSerializer
   queryset = UserModel.objects.all()
