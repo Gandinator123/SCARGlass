@@ -1,5 +1,5 @@
-import React from "react";
-import { Text, View, StyleSheet, Pressable, ScrollView, Image, TouchableOpacity } from "react-native";
+import React, {useEffect, useState} from "react";
+import { Text, View, StyleSheet, Pressable, ScrollView, Image, TouchableOpacity, } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -13,6 +13,8 @@ import LoginScreenPage from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import QRScreen from "./screens/QRScreen";
 import DocumentsScreen from "./screens/DocumentsScreen";
+import ScanDevicesScreen from "./screens/ScanDevicesScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 ///////////////////////////////////////
 //// EVERYTHING ABOUT HOMESCREEN STUFF
@@ -276,7 +278,21 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const MainApp = () => {
-  return(
+  const [paired, setPaired] = useState(true);
+  useEffect(() => {
+    async function fetchData(key) {
+      const screen = await AsyncStorage.getItem(key);
+      console.log(screen);
+      if (screen == null){
+        // navigation.navigate("ScanDevicesScreen");
+        setPaired(false);
+      }
+    }
+    fetchData("screen");
+  }, []);
+
+  return paired ? 
+  (
     <Tab.Navigator
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
@@ -300,11 +316,12 @@ const MainApp = () => {
     <Tab.Screen name="Home" component={HomeStackScreen} />
     <Tab.Screen name="Responses" component={ResponsesStackScreen} />
     <Tab.Screen name="Settings" component={SettingsStackScreen} />
-  </Tab.Navigator>)
+  </Tab.Navigator>) : <ScanDevicesScreen setPaired={setPaired} />
 };
 
 const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
+
   return (
     <Stack.Navigator initialRouteName="LoginScreenPage">
       <Stack.Screen
@@ -323,6 +340,7 @@ const Auth = () => {
           },
         }}
       />
+      
     </Stack.Navigator>
   );
 };

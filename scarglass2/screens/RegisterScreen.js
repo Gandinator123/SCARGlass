@@ -26,7 +26,7 @@ const RegisterScreen = (props) => {
   const emailInputRef = createRef();
   const passwordInputRef = createRef();
 
-  const handleSubmitButton = () => {
+  const handleSubmitButton = ({navigation}) => {
     setErrortext("");
     if (!userName) {
       alert("Please fill Name");
@@ -52,14 +52,14 @@ const RegisterScreen = (props) => {
       .then((response) => {
         console.log(response);
         setLoading(false);
+        setIsRegistraionSuccess(true);
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
       });
-    props.navigation.goBack(null);
   };
-
+  console.log(isRegistraionSuccess)
   if (isRegistraionSuccess) {
     return (
       <View
@@ -76,11 +76,11 @@ const RegisterScreen = (props) => {
             alignSelf: "center",
           }}
         />
-        <Text style={styles.successTextStyle}>Registration Successful</Text>
+        <Text style={styles.successTextStyle}>Registration successful!</Text>
         <TouchableOpacity
           style={styles.buttonStyle}
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate("LoginScreen")}
+          onPress={() => navigation.navigate("LoginScreen")}
         >
           <Text style={styles.buttonTextStyle}>Login Now</Text>
         </TouchableOpacity>
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   successTextStyle: {
-    color: "white",
+    color: "black",
     textAlign: "center",
     fontSize: 18,
     padding: 30,

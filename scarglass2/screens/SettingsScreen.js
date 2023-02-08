@@ -1,6 +1,16 @@
 import React from 'react';
-import {AppRegistry,Component,StyleSheet,Text,View,SafeAreaView,ScrollViewBase } from 'react-native';
+import {AppRegistry,Component,StyleSheet,Text,View,SafeAreaView,ScrollViewBase, TouchableOpacity, ScrollView  } from 'react-native';
 import SwitchSelector from "react-native-switch-selector";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const removeData = async (key) => {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (e) {
+    // saving error
+  }
+};
 
 // stack components
 function SettingsScreen() {
@@ -19,6 +29,7 @@ function SettingsScreen() {
 ];
     return (
         <View>
+        <ScrollView>
         <Text style={styles.hellotext}>Hello Rohan!</Text>
           <SafeAreaView>
             <View>
@@ -92,8 +103,17 @@ function SettingsScreen() {
               
             />
           </View>
-
-          
+          <TouchableOpacity
+              style={styles.buttonStyle}
+              activeOpacity={0.5}
+              onPress={() => {
+                removeData('access');
+                removeData('refresh');
+              }}
+            >
+              <Text style={styles.buttonTextStyle}>Sign out</Text>
+            </TouchableOpacity>
+            </ScrollView>
         </View>
       );
   }
@@ -111,7 +131,26 @@ function SettingsScreen() {
       paddingHorizontal : 5,
       fontSize: 50, 
       fontWeight: 'bold',
-    }
+    },
+    buttonStyle: {
+      backgroundColor: "#000000",
+      borderWidth: 0,
+      color: "#FFFFFF",
+      borderColor: "#7DE24E",
+      height: 50,
+      alignItems: "center",
+      borderRadius: 30,
+      marginLeft: 35,
+      marginRight: 35,
+      marginTop: 20,
+      marginBottom: 25,
+    },
+    buttonTextStyle: {
+      color: "#FFFFFF",
+      paddingVertical: 15,
+      fontWeight: "bold",
+      fontSize: 16,
+    },
   });
 
 export default SettingsScreen
