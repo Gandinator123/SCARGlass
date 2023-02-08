@@ -11,6 +11,7 @@ import json
 from SpeechFunctions import record_audio, audio_to_text, text_to_function, translate, scan_pdf, scan_qr, save_text, take_picture, error
 from Home import TimeComponent, DateComponent, WeatherComponent
 import threading
+import os
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -96,15 +97,8 @@ class Screen:
         while True:
             if not GPIO.input(18):
                 if self.global_state == -2:
-                    curr = time.time()
-                    do = True
-                    while time.time()-curr < 1.5:
-                       if GPIO.input(18):
-                           do = False
-                           break
-                    if do:
-                        self.global_state = -1
-                else:
+                    self.global_state = -1
+                elif self.global_state == 0:
                     self.global_state = 1
             
     
@@ -157,10 +151,21 @@ class Screen:
             self.postProcess()
 
     def homePage(self):
+        # self.preProcess()
+        # self.dateComponent.show()
+        # self.timeComponent.show()
+        # self.weatherComponent.show()
+        # self.postProcess()
+
         self.preProcess()
-        self.dateComponent.show()
-        self.timeComponent.show()
-        self.weatherComponent.show()
+        text = "home page"
+        (font_width, font_height) = self.font.getsize(text)
+        self.draw.text(
+                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                text,
+                font=self.font,
+                fill=self.fontColor,
+            )
         self.postProcess()
 
     def scrollPage(self):
@@ -181,7 +186,8 @@ class Screen:
                 fill=self.fontColor,
             )
             self.postProcess()
-
+        print("finished")
+        print("time taken: ", time.time() - curr)
         if time.time() - curr < 1.5:
             curr = time.time()
             while time.time()-curr < 5:
@@ -262,10 +268,13 @@ class Screen:
             # if self.global_state == -2:
             #     screen.offState()
             if self.global_state == -1:
+                print("turning on")
                 screen.turnOn()
             if self.global_state == 0:
+                print("home page")
                 screen.homePage()
             elif self.global_state == 1:
+                print("scroll page")
                 screen.scrollPage()
 
 screen = Screen()
