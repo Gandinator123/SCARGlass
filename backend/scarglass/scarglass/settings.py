@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'photos',
     'questions',
     'users',
+    'pairings',
 ]
 
 MIDDLEWARE = [
