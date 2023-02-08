@@ -16,7 +16,7 @@ class PairingList(generics.ListAPIView):
       queryset = queryset.filter(Q(paired=True) & Q(date__gte = five_minutes_ago))
 
   def list(self, request):
-    queryset = self.filter_queryset(self.get_queryset())
+    queryset = self.filter_queryset(queryset)
     serializer = PairingSerializer(queryset, many=True)
     return response.Response(serializer.data)
 
