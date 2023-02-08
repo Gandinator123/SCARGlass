@@ -12,9 +12,9 @@ class UserList(generics.ListAPIView):
   queryset = UserModel.objects.all()
 
   def filter_queryset(self, queryset):
-    token = self.request.user
+    token = self.request.user.id
     if token is not None:
-      queryset = queryset.filter(user=token)
+      queryset = queryset.filter(id=token)
     return queryset
 
   def list(self, request):
