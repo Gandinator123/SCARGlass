@@ -16,7 +16,7 @@ class ScreenDetail(generics.RetrieveAPIView):
   queryset = ScreenModel.objects.all()
   serializer_class = ScreenSerializer
 
-class ScreenUpdate(generics.UpdateAPIView):
+class ScreenUpdate(generics.RetrieveUpdateDestroyAPIView):
   queryset = ScreenModel.objects.all()
   serializer_class = ScreenSerializer
 
