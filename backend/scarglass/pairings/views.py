@@ -22,7 +22,7 @@ class PairingList(generics.ListAPIView):
 
 class PairingCreate(generics.CreateAPIView):
   queryset = PairingModel.objects.all()
-  serializer_class = PairingSerializer()
+  serializer_class = PairingSerializer
 
 class PairingDetail(generics.RetrieveUpdateDestroyAPIView):
   queryset = PairingModel.objects.all()
