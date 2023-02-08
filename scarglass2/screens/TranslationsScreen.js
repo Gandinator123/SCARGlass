@@ -1,8 +1,32 @@
 import React, {useEffect, useState} from "react";
-import { Text, View, StyleSheet, Pressable, Image, ScrollView, TouchableOpacity, Modal, RefreshControl} from "react-native";
+import { Text, View, StyleSheet, Pressable, Image, ScrollView, TouchableOpacity, Modal, RefreshControl, Alert} from "react-native";
 import axios from "axios";
 
 let BASE_URL = "http://54.234.70.84:8000/";
+
+const deleteFunction = (photo_id) => {
+  Alert.alert(
+    'Delete?',
+    'Are you sure you want to delete this?',
+    [
+      {
+        text: 'Delete',
+        onPress: () =>  axios.delete((BASE_URL + `photos/${photo_id}/delete/`)),
+        style: 'destructive',
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+    ],
+    {
+      cancelable: true,
+      onDismiss: () =>
+        console.log("dismissed")
+    },
+  );
+}
 
 const Translationsmodal = ({photo}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,7 +60,7 @@ const Translationsmodal = ({photo}) => {
           </View>
         </TouchableOpacity>
       </Modal>
-      <TouchableOpacity onPress={()=> setModalVisible(true)}>
+      <TouchableOpacity onPress={()=> setModalVisible(true)} onLongPress={()=> deleteFunction(photo.id)}>
         <Image
           style={{
             width: 91,
@@ -60,7 +84,7 @@ const TranslationScreen = () => {
   useEffect(() => {
     if(refreshing){
       axios
-      .get(BASE_URL + "photos/")
+      .get(BASE_URL + "photos/", {params: {img_type:1}})
       .then((response) => {
         setPhotos([...response.data]);
         console.log(response.data);
