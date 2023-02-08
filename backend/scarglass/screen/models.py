@@ -1,6 +1,9 @@
 from django.db import models
+from users.models import UserModel
 
 class ScreenModel(models.Model):
+  user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name="screens", blank=True)
+
   time_font = models.CharField(max_length=255, default='Montserrat-Black')
   time_size = models.IntegerField(default=16)
 

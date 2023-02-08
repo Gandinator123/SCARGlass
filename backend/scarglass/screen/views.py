@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from .models import ScreenModel
 from .serializers import ScreenSerializer
 
@@ -10,6 +10,7 @@ class ScreenList(generics.ListAPIView):
 class ScreenCreate(generics.CreateAPIView):
   queryset = ScreenModel.objects.all()
   serializer_class = ScreenSerializer
+  permission_classes = (permissions.IsAuthenticated,)
 
 class ScreenDetail(generics.RetrieveAPIView):
   queryset = ScreenModel.objects.all()
