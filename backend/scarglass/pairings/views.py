@@ -3,14 +3,15 @@ from .models import PairingModel
 from .serializers import PairingSerializer
 from django.db.models import Q
 from datetime import date, timedelta
+from django.utils import timezone
 
 class PairingList(generics.ListAPIView):
   queryset = PairingModel.objects.all()
   serializer_class = PairingSerializer
-  
+
   def filter_queryset(self, queryset):
     pair = self.request.query_params.get('pair')
-    five_minutes_ago = django.utils.timezone.now() + datetime.timedelta(minutes=-5)
+    five_minutes_ago = timezone.now() + datetime.timedelta(minutes=-5)
     if pair:
       queryset = queryset.filter(Q(paired=True) & Q(date__gte = five_minutes_ago))
 
