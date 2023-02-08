@@ -1,5 +1,6 @@
 from .models import UserModel
 from rest_framework import serializers
+from screen.serializers import ScreenSerializer
 
 class RegisterSerializer(serializers.ModelSerializer):
   class Meta:
@@ -18,7 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     return user
 
 class UserSerializer(serializers.ModelSerializer):
-  screens = serializers.RelatedField(source='ScreenModel', read_only=True)
+  screens = ScreenSerializer(read_only=True, many=True)
 
   class Meta:
     model = UserModel
