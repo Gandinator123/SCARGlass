@@ -18,6 +18,8 @@ class PairingList(generics.ListAPIView):
     if pair == 'true':
       queryset = queryset.filter(Q(paired=True) & Q(date__gte = five_minutes_ago))
 
+    return queryset
+
   def list(self, request):
     queryset = self.filter_queryset(self.get_queryset())
     serializer = self.get_serializer(queryset, many=True)
