@@ -166,6 +166,7 @@ class Screen:
         record_t.start()
 
         # while recording, show it's recording
+        curr = time.time()
         while record_t.is_alive():
             self.preProcess()
             text = 'Recording...'
@@ -177,6 +178,22 @@ class Screen:
                 fill=self.fontColor,
             )
             self.postProcess()
+
+        if time.time() - curr < 1.5:
+            curr = time.time()
+            while time.time()-curr < 5:
+                self.preProcess()
+                text = "turning off...!"
+                (font_width, font_height) = self.font.getsize(text)
+                self.draw.text(
+                        (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                        text,
+                        font=self.font,
+                        fill=self.fontColor,
+                    )
+                self.postProcess()
+            self.global_state = -2
+            return 
 
         result = []
         stot_t = threading.Thread(target=self.stot_thread, args=[result])
@@ -222,16 +239,18 @@ class Screen:
         self.global_state = 0
     
     def turnOn(self):
-        self.preProcess()
-        text = "hello friend!"
-        (font_width, font_height) = self.font.getsize(text)
-        self.draw.text(
-                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
-                text,
-                font=self.font,
-                fill=self.fontColor,
-            )
-        self.postProcess()
+        curr = time.time()
+        while time.time()-curr < 5:
+            self.preProcess()
+            text = "hello friend!"
+            (font_width, font_height) = self.font.getsize(text)
+            self.draw.text(
+                    (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                    text,
+                    font=self.font,
+                    fill=self.fontColor,
+                )
+            self.postProcess()
         self.global_state = 0
 
 
