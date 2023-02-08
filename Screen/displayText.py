@@ -77,7 +77,7 @@ class Screen:
 
         # FONT
         self.fontSize = 12
-        self.font = ImageFont.truetype("fonts/Montserrat-Medium.otf", self.fontSize)
+        self.font = ImageFont.truetype("Montserrat-Medium.otf", self.fontSize)
         self.fontColor = font_color
 
         # DRAWING SETUP

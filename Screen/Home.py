@@ -16,7 +16,7 @@ class TimeComponent:
     def __init__(self, draw, time_format, font_color):
         self.draw = draw
         self.fontSize = 16
-        self.font = ImageFont.truetype("fonts/Montserrat-Black.otf", self.fontSize)
+        self.font = ImageFont.truetype("Montserrat-Black.otf", self.fontSize)
         self.fontColor = font_color
         self.time_format = time_format
         self.time_formats = ["%H:%M:%S", "%H:%M", "%I:%M:%S %p", "%I:%M %p"]
@@ -36,7 +36,7 @@ class DateComponent:
     def __init__(self, draw, date_format, day_format, font_color):
         self.draw = draw
         self.fontSize = 12
-        self.font = ImageFont.truetype("fonts/Montserrat-Medium.otf", self.fontSize)
+        self.font = ImageFont.truetype("Montserrat-Medium.otf", self.fontSize)
         self.fontColor = font_color
         self.date_format = date_format
         self.date_formats = ['%d/%m/%Y']
@@ -74,7 +74,7 @@ class WeatherComponent:
         self.icon = None
         self.temp = None
         self.fontSize = 12
-        self.font = ImageFont.truetype("fonts/Montserrat-Medium.otf", self.fontSize)
+        self.font = ImageFont.truetype("Montserrat-Medium.otf", self.fontSize)
         self.fontColor = font_color
 
     def fetchWeatherData(self):
