@@ -4,7 +4,6 @@ import uuid
 from .managers import UserManager
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4),
   email = models.EmailField(max_length=255, unique=True)
   name = models.CharField(max_length=255)
   password = models.CharField(max_length=255)
