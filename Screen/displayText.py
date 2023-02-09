@@ -37,7 +37,7 @@ OPERATIONS = [
     ('Scanning...', scan_qr), # scan_qr()
     ('Saving...', save_text), # solve_equation()
     ('Hold still...', take_picture), # take_picture()
-    ('Oops! Try again?', error),
+    ('Oops! Try again?', error)
 ]
         
 class Screen:
@@ -174,7 +174,6 @@ class Screen:
         record_t.start()
 
         # while recording, show it's recording
-        curr = time.time()
         while record_t.is_alive():
             self.preProcess()
             text = 'Recording...'
@@ -186,23 +185,7 @@ class Screen:
                 fill=self.fontColor,
             )
             self.postProcess()
-        print("finished")
-        print("time taken: ", time.time() - curr)
-        if time.time() - curr < 1.5:
-            curr = time.time()
-            while time.time()-curr < 5:
-                self.preProcess()
-                text = "turning off...!"
-                (font_width, font_height) = self.font.getsize(text)
-                self.draw.text(
-                        (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
-                        text,
-                        font=self.font,
-                        fill=self.fontColor,
-                    )
-                self.postProcess()
-            self.global_state = -2
-            return 
+        
 
         result = []
         stot_t = threading.Thread(target=self.stot_thread, args=[result])
@@ -225,6 +208,22 @@ class Screen:
         op = text_to_function(result[0])
         if isinstance(op, int):
             # op is operation 
+            if op == 6:
+                curr = time.time()
+                while time.time()-curr < 5:
+                    self.preProcess()
+                    text = "hello friend!"
+                    (font_width, font_height) = self.font.getsize(text)
+                    self.draw.text(
+                            (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                            text,
+                            font=self.font,
+                            fill=self.fontColor,
+                        )
+                    self.postProcess()
+                self.global_state = -2
+                return
+
             op_t = threading.Thread(target=OPERATIONS[op][1])
             op_t.start()
 
