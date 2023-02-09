@@ -111,6 +111,8 @@ def text_to_function(text):
         # take_picture()
         return 4
 
+    elif 'turn' in word_set and 'off' in word_set:
+        return 6
     else:
         # no_valid_function_error()
         return 5
