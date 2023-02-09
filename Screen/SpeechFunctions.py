@@ -112,6 +112,7 @@ def text_to_function(text):
         return 4
 
     elif 'turn' in word_set and 'off' in word_set:
+        print("hooray!!")
         return 6
     else:
         # no_valid_function_error()

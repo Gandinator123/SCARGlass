@@ -73,12 +73,13 @@ class Screen:
         # font_color = (x['font_blue'], x['font_green'], x['font_red']) # BGR!
         # time_format, date_format, day_format = x['time_format'], x['date_format'], x['day_format']
         self.background_color = (255, 255, 255) # BGR!
+        self.black_background = (0, 0, 0)
         font_color = (0, 0, 0) # BGR!
         time_format, date_format, day_format = 0, 0, 0
 
         # FONT
         self.fontSize = 12
-        self.font = ImageFont.truetype("Montserrat-Medium.otf", self.fontSize)
+        self.font = ImageFont.truetype("fonts/Montserrat-Medium.otf", self.fontSize)
         self.fontColor = font_color
 
         # DRAWING SETUP
@@ -110,6 +111,9 @@ class Screen:
         
     def preProcess(self):
         self.draw.rectangle((0, 0, SCREEN_WIDTH + SCREEN_X_OFFSET, SCREEN_HEIGHT + SCREEN_Y_OFFSET), outline=0, fill=self.background_color)
+
+    def blackScreen(self):
+        self.draw.rectangle((0, 0, SCREEN_WIDTH + SCREEN_X_OFFSET, SCREEN_HEIGHT + SCREEN_Y_OFFSET), outline=0, fill=self.black_background)
 
     def postProcess(self):
         image = ImageChops.invert(self.image)
@@ -151,22 +155,12 @@ class Screen:
             self.postProcess()
 
     def homePage(self):
-        # self.preProcess()
-        # self.dateComponent.show()
-        # self.timeComponent.show()
-        # self.weatherComponent.show()
-        # self.postProcess()
-
         self.preProcess()
-        text = "home page"
-        (font_width, font_height) = self.font.getsize(text)
-        self.draw.text(
-                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
-                text,
-                font=self.font,
-                fill=self.fontColor,
-            )
+        self.dateComponent.show()
+        self.timeComponent.show()
+        self.weatherComponent.show()
         self.postProcess()
+
 
     def scrollPage(self):
         # start recording
@@ -212,7 +206,7 @@ class Screen:
                 curr = time.time()
                 while time.time()-curr < 5:
                     self.preProcess()
-                    text = "hello friend!"
+                    text = "turning off!"
                     (font_width, font_height) = self.font.getsize(text)
                     self.draw.text(
                             (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
@@ -221,6 +215,7 @@ class Screen:
                             fill=self.fontColor,
                         )
                     self.postProcess()
+                print("done")
                 self.global_state = -2
                 return
 
@@ -261,15 +256,35 @@ class Screen:
             self.postProcess()
         self.global_state = 0
 
+    def offState(self):
+        self.preProcess()
+        text = "I'm off!"
+        (font_width, font_height) = self.font.getsize(text)
+        self.draw.text(
+                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                text,
+                font=self.font,
+                fill=self.fontColor,
+            )
+        self.postProcess
 
     def run(self):
         while True:
-            # if self.global_state == -2:
-            #     screen.offState()
-            if self.global_state == -1:
+            if self.global_state == -2:
+                self.blackScreen()
+                text = "I'm off"
+                (font_width, font_height) = self.font.getsize(text)
+                self.draw.text(
+                    (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                    text,
+                    font=self.font,
+                    fill=self.fontColor,
+                )
+                self.postProcess()
+            elif self.global_state == -1:
                 print("turning on")
                 screen.turnOn()
-            if self.global_state == 0:
+            elif self.global_state == 0:
                 print("home page")
                 screen.homePage()
             elif self.global_state == 1:
