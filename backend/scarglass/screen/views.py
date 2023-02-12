@@ -12,7 +12,7 @@ class ScreenCreate(views.APIView):
 
   def post(self, request, format=None):
     print(request.user.id)
-    user = request.user.id
+    user = request.user
     request.data['user'] = user
     serializer = ScreenSerializer(data=request.data)
     if serializer.is_valid():
