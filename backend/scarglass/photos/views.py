@@ -15,6 +15,7 @@ import sys
 from io import BytesIO
 from django.core.files import File
 from scarglass.settings import MEDIA_URL
+import os
 
 class PhotoList(generics.ListAPIView):
   
@@ -91,7 +92,8 @@ class PhotoCreate(views.APIView):
       new = Image.fromarray(img)
 
       # new.save(, 'JPEG', quality=85)
-      path = MEDIA_URL + temp.name + '.pdf'
+      path, ext = os.path.splitext(temp.name)
+      path = MEDIA_URL + path + '.pdf'
       print(path)
       
       # request.data._mutable = True
