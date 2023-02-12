@@ -111,6 +111,9 @@ def text_to_function(text):
         # take_picture()
         return 4
 
+    elif 'turn' in word_set and 'off' in word_set:
+        return 6
+
     else:
         # no_valid_function_error()
         return 5
@@ -124,7 +127,7 @@ def take_picture():
 
     ## sending the photo to the server
     url = "http://54.234.70.84:8000/photos/create/"
-    data = {'screen': 1}
+    data = {'screen': 1, 'img_type': 0}
     file = {
         'photo': open('/home/pi/{}.jpg'.format(img_name), 'rb'),
     }
@@ -139,22 +142,10 @@ def take_picture():
 # TODO
 def translate(language):
     print("we are translating using language: ", language)
-    
+
 # TODO
 def save_text():
     print("we are saving text")
-
-# def scan_qr():
-#     import glob
-#     import cv2
-#     import pandas as pd
-#     import pathlib
-#     import os
-#     #take a picture and save picture
-#     img = cv2.imread(path)
-#     detect = cv2.QRCodeDetector()
-#     value, points, straight_qrcode = detect.detectAndDecode(img)
-#     print(value)
 
 # TODO
 def scan_pdf():

@@ -11,6 +11,7 @@ import json
 from SpeechFunctions import record_audio, audio_to_text, text_to_function, translate, scan_pdf, scan_qr, save_text, take_picture, error
 from Home import TimeComponent, DateComponent, WeatherComponent
 import threading
+import smbus2  
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -42,9 +43,12 @@ OPERATIONS = [
 class Screen:
     def __init__(self):
         # GLOBALS
-        self.global_state = 0
-        key_t = threading.Thread(target=self.keypress_thread)
-        key_t.start()
+        self.global_state = -4
+        button_t = threading.Thread(target=self.button_thread)
+        button_t.start()
+
+        temperature_t = threading.Thread(target=self.temperature_thread)
+        temperature_t.start()
 
         # COMMS
         spi = board.SPI()
@@ -64,35 +68,62 @@ class Screen:
             y_offset=0,
         )
 
-        # API SCREEN DATA
-        url = BASE_URL + 'screens/1/'
-        response = requests.get(url)
-        x = response.json()
-        self.background_color = (x['background_blue'], x['background_green'], x['background_red']) # BGR!
-        font_color = (x['font_blue'], x['font_green'], x['font_red']) # BGR!
-        time_format, date_format, day_format = x['time_format'], x['date_format'], x['day_format']
+        # DRAWING SETUP
+        self.image = Image.new("RGB", (SCREEN_WIDTH + SCREEN_X_OFFSET, SCREEN_HEIGHT + SCREEN_Y_OFFSET))
+        self.draw = ImageDraw.Draw(self.image)
 
         # FONT
         self.fontSize = 12
         self.font = ImageFont.truetype("fonts/Montserrat-Medium.otf", self.fontSize)
-        self.fontColor = font_color
-
-        # DRAWING SETUP
-        self.image = Image.new("RGB", (SCREEN_WIDTH + SCREEN_X_OFFSET, SCREEN_HEIGHT + SCREEN_Y_OFFSET))
-        self.draw = ImageDraw.Draw(self.image)
-        self.preProcess()
-
-        # HOME PAGE
-        self.dateComponent = DateComponent(self.draw, date_format, day_format, font_color=font_color)
-        self.timeComponent = TimeComponent(self.draw, time_format, font_color=font_color)
-        self.weatherComponent = WeatherComponent(self.image, self.draw, font_color=font_color)
 
         # SCROLL PAGE -> prefer this to be its own class but need to think more about how
 
-    def keypress_thread(self):
+    def temperature_thread(self):
+        bus = smbus2.SMBus(1)
+
+        i=T0=T1=T2=T3=T4=Tav = 0
+
+        while True:
+            # reset device
+            bus.write_byte(0x40, 0xfe)
+            time.sleep(.3)
+
+            bus.write_byte(0x40, 0xF3)
+            err = True
+            while err:
+                try:
+                    T_raw = bus.read_byte(0x40)
+                    t_raw = T_raw + (T_raw << 8)
+                    err = False
+                except:
+                    time.sleep(0.01)
+                
+            # compute and save humidity and temp values
+            i += 1
+            T4 = T3
+            T3 = T2
+            T2 = T1
+            T1 = T0
+            T0 = 175.72*t_raw/65536.0 - 46.85
+
+            Tav += T0
+            Tav -= T4
+
+            if i > 4:
+                # print("current temp {0} ".format(T0))
+                # print("average temp {0} ".format(Tav / 4))
+
+                if T0 > (Tav / 4) + 0.5:
+                    if self.global_state == -4:
+                        self.global_state = -3
+            
+            time.sleep(0.5)
+
+    def button_thread(self):
         while True:
             if not GPIO.input(18):
-                self.global_state = 1
+                if self.global_state == 0:
+                    self.global_state = 1
     
     def record_thread(self):
         record_audio()
@@ -102,6 +133,9 @@ class Screen:
         
     def preProcess(self):
         self.draw.rectangle((0, 0, SCREEN_WIDTH + SCREEN_X_OFFSET, SCREEN_HEIGHT + SCREEN_Y_OFFSET), outline=0, fill=self.background_color)
+
+    def blackScreen(self):
+        self.draw.rectangle((0, 0, SCREEN_WIDTH + SCREEN_X_OFFSET, SCREEN_HEIGHT + SCREEN_Y_OFFSET), outline=0, fill=(0, 0, 0))
 
     def postProcess(self):
         image = ImageChops.invert(self.image)
@@ -188,6 +222,23 @@ class Screen:
         op = text_to_function(result[0])
         if isinstance(op, int):
             # op is operation 
+            if op == 6:
+                curr = time.time()
+                while time.time()-curr < 5:
+                    self.preProcess()
+                    text = "turning off!"
+                    (font_width, font_height) = self.font.getsize(text)
+                    self.draw.text(
+                            (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                            text,
+                            font=self.font,
+                            fill=self.fontColor,
+                        )
+                    self.postProcess()
+                print("done")
+                self.global_state = -4
+                return
+
             op_t = threading.Thread(target=OPERATIONS[op][1])
             op_t.start()
 
@@ -210,12 +261,80 @@ class Screen:
         
         self.global_state = 0
 
+    def pair(self):
+        # page for pairing with app TODO
+        pass
+
+    def turnOn(self):
+        # check if screen ID exists in file
+        try:
+            with open('screen_config.txt') as f_obj:
+                contents = f_obj.read()
+                contents = contents.strip().split('=')
+                self.screen_id = contents[1]
+                self.global_state = -1
+        except FileNotFoundError:
+            print("File does not exist")
+            self.global_state = -2
+
+    def welcome(self):
+        # fetch screen data
+        url = BASE_URL + 'screens/' + self.screen_id
+        response = requests.get(url)
+        x = response.json()
+        self.background_color = (x['background_blue'], x['background_green'], x['background_red']) # BGR!
+        font_color = (x['font_blue'], x['font_green'], x['font_red']) # BGR!
+        time_format, date_format, day_format = x['time_format'], x['date_format'], x['day_format']
+
+        # initialise components
+        self.dateComponent = DateComponent(self.draw, date_format, day_format, font_color=font_color)
+        self.timeComponent = TimeComponent(self.draw, time_format, font_color=font_color)
+        self.weatherComponent = WeatherComponent(self.image, self.draw, font_color=font_color)
+        self.fontColor = font_color
+
+        # welcome user
+        curr = time.time()
+        while time.time()-curr < 5:
+            self.preProcess()
+            text = "Hello " + x['user'] + '!'
+            (font_width, font_height) = self.font.getsize(text)
+            self.draw.text(
+                    (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                    text,
+                    font=self.font,
+                    fill=self.fontColor,
+                )
+            self.postProcess()
+
+        # move to home page
+        self.global_state = 0
+
+    def offState(self):
+        self.blackScreen()
+        text = "I'm off!"
+        (font_width, font_height) = self.font.getsize(text)
+        self.draw.text(
+                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                text,
+                font=self.font,
+                fill=(255, 255, 255),
+            )
+        self.postProcess()
+
     def run(self):
         while True:
-            if self.global_state == 0:
-                screen.homePage()
+            if self.global_state == -4:
+                self.offState()
+            elif self.global_state == -3:
+                self.turnOn()
+            elif self.global_state == -2:
+                self.pair()
+            elif self.global_state == -1:
+                self.welcome()
+            elif self.global_state == 0:
+                self.homePage()
             elif self.global_state == 1:
-                screen.scrollPage()
+                self.scrollPage()
 
 screen = Screen()
 screen.run()
