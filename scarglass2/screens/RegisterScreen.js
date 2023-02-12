@@ -130,6 +130,7 @@ const RegisterScreen = ({ navigation }) => {
               underlineColorAndroid="#f000"
               placeholder="Enter Email"
               placeholderTextColor="#8b9cb5"
+              autoCapitalize="none"
               keyboardType="email-address"
               ref={emailInputRef}
               returnKeyType="next"

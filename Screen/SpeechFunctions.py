@@ -79,7 +79,7 @@ def audio_to_text():
 
 def text_to_function(text):
     if text == 'error':
-        error()
+        error(None)
 
     if text.lower().split()[0] == 'question':
         text = text[8:]
@@ -89,11 +89,12 @@ def text_to_function(text):
 
     # TODO handle this
     if 'translate' in word_set:
-        for x in LANGUAGES: 
-            if x in word_set:
-                translate(x)
-                return
-        error()
+        # for x in LANGUAGES: 
+        #     if x in word_set:
+        #         translate(x)
+        #         return
+        # error()
+        return 0
     
     elif 'scan' in word_set and 'pdf' in word_set:
         # scan_pdf()
@@ -103,22 +104,21 @@ def text_to_function(text):
         #scan_qr()
         return 2
 
-    elif 'text' in word_set or 'handwriting' in word_set:
-        # solve_equation()
-        return 3
-
     elif 'take' in word_set and ('picture' in word_set or 'photo' in word_set):
         # take_picture()
-        return 4
+        return 3
+
+    elif 'reload' in word_set:
+        return 5
 
     elif 'turn' in word_set and 'off' in word_set:
         return 6
 
     else:
         # no_valid_function_error()
-        return 5
+        return 4
 
-def take_picture():
+def camera_to_server(screen_id, img_type):
     camera = PiCamera()
 
     ## showing the camera...
@@ -127,7 +127,7 @@ def take_picture():
 
     ## sending the photo to the server
     url = "http://54.234.70.84:8000/photos/create/"
-    data = {'screen': 1, 'img_type': 0}
+    data = {'screen': screen_id, 'img_type': img_type}
     file = {
         'photo': open('/home/pi/{}.jpg'.format(img_name), 'rb'),
     }
@@ -139,21 +139,27 @@ def take_picture():
 
     camera.close()
 
-# TODO
-def translate(language):
-    print("we are translating using language: ", language)
+def take_picture(screen_id):
+    camera_to_server(screen_id, 0)
+
+# post to url: base_url + 'photos/create/
+# look at take picture, but:
+# img_type: 1 -> translate, 2-> qr, 3 -> pdf
 
 # TODO
-def save_text():
-    print("we are saving text")
+def translate(screen_id):
+    camera_to_server(screen_id, 1)
+    print("we are translating")
 
 # TODO
-def scan_pdf():
-    print("we are scanning a pdf")
-
-# TODO
-def scan_qr():
+def scan_qr(screen_id):
+    camera_to_server(screen_id, 2)
     print("We are scanning a qr code")
+
+# TODO
+def scan_pdf(screen_id):
+    camera_to_server(screen_id, 3)
+    print("we are scanning a pdf")
 
 def chat_gpt(text):
     api_key = OPENAI_API_KEY
@@ -182,6 +188,6 @@ def chat_gpt(text):
 
     return r
 
-def error():
+def error(screen_id):
     time.sleep(2)
     return "no valid function error"

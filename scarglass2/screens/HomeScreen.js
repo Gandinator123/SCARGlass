@@ -11,7 +11,7 @@ const HomeScreen = () => {
   const [id, setId] = useState(null);
   useEffect(() => {
     const setScreen = async () => {
-      let screen = await AsyncStorage.getItem("screen");
+      let screen = await AsyncStorage.getItem("screen_id");
       setId(screen);
     };
     setScreen();

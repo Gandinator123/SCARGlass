@@ -8,10 +8,13 @@ from adafruit_rgb_display import st7735
 from datetime import datetime
 import requests
 import json
-from SpeechFunctions import record_audio, audio_to_text, text_to_function, translate, scan_pdf, scan_qr, save_text, take_picture, error
+from SpeechFunctions import record_audio, audio_to_text, text_to_function, translate, scan_pdf, scan_qr, take_picture, error
 from Home import TimeComponent, DateComponent, WeatherComponent
 import threading
 import smbus2  
+from server import make_handler, get_ip_address
+from http.server import HTTPServer
+
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -35,7 +38,6 @@ OPERATIONS = [
     ('Translating...', translate), # translate()
     ('Scanning...', scan_pdf), # scan_pdf()
     ('Scanning...', scan_qr), # scan_qr()
-    ('Saving...', save_text), # solve_equation()
     ('Hold still...', take_picture), # take_picture()
     ('Oops! Try again?', error),
 ]
@@ -155,7 +157,7 @@ class Screen:
             
             x, y = SCREEN_X_OFFSET, SCREEN_Y_OFFSET
             if timeDelta > 2:
-                y -= (timeDelta - 2) * 10
+                y -= (timeDelta - 2) * self.scroll_speed
 
             for word in text_split:
                 word += ' '
@@ -223,6 +225,7 @@ class Screen:
         if isinstance(op, int):
             # op is operation 
             if op == 6:
+                # turn off
                 curr = time.time()
                 while time.time()-curr < 5:
                     self.preProcess()
@@ -235,11 +238,15 @@ class Screen:
                             fill=self.fontColor,
                         )
                     self.postProcess()
-                print("done")
                 self.global_state = -4
                 return
+            
+            elif op == 5:
+                # reload
+                self.global_state = -1
+                return
 
-            op_t = threading.Thread(target=OPERATIONS[op][1])
+            op_t = threading.Thread(target=OPERATIONS[op][1], args=(self.screen_id,))
             op_t.start()
 
             while op_t.is_alive():
@@ -256,14 +263,49 @@ class Screen:
 
         else:
             # op is text to render
-            # TODO show question too
             self.scroll(op)
         
         self.global_state = 0
 
+
+    def server_thread(self):
+        httpd = HTTPServer(('0.0.0.0', 8000), make_handler(screen=self))
+        httpd.serve_forever()
+
     def pair(self):
-        # page for pairing with app TODO
-        pass
+        self.blackScreen()
+        text = "Pairing..."
+        (font_width, font_height) = self.font.getsize(text)
+        self.draw.text(
+                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                text,
+                font=self.font,
+                fill=(255, 255, 255),
+            )
+        self.postProcess()
+
+        # start http server
+        server_t = threading.Thread(target=self.server_thread)
+        server_t.start()
+
+        url = 'http://54.234.70.84:8000/pairings/create/'
+
+        # every 60s post IP to server
+        startTime = datetime.now()
+        sent = False
+        while self.global_state == -2:
+            currentTime = datetime.now()
+            timeDelta = int((currentTime - startTime).total_seconds())
+            if timeDelta % 60 == 0:
+                if not sent:
+                    data = {
+                        'ip': get_ip_address(),
+                    }
+                    response = requests.post(url, json=data)
+                    print(response.text)
+                    sent = True
+            elif sent:
+                sent = False
 
     def turnOn(self):
         # check if screen ID exists in file
@@ -285,6 +327,8 @@ class Screen:
         self.background_color = (x['background_blue'], x['background_green'], x['background_red']) # BGR!
         font_color = (x['font_blue'], x['font_green'], x['font_red']) # BGR!
         time_format, date_format, day_format = x['time_format'], x['date_format'], x['day_format']
+        self.scroll_speed_options = [5, 10, 20]
+        self.scroll_speed = self.scroll_speed_options[x['scroll_speed']]
 
         # initialise components
         self.dateComponent = DateComponent(self.draw, date_format, day_format, font_color=font_color)
@@ -293,18 +337,18 @@ class Screen:
         self.fontColor = font_color
 
         # welcome user
-        curr = time.time()
-        while time.time()-curr < 5:
-            self.preProcess()
-            text = "Hello " + x['user'] + '!'
-            (font_width, font_height) = self.font.getsize(text)
-            self.draw.text(
-                    (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
-                    text,
-                    font=self.font,
-                    fill=self.fontColor,
-                )
-            self.postProcess()
+        self.preProcess()
+        text = "Hello " + x['user'] + '!'
+        (font_width, font_height) = self.font.getsize(text)
+        self.draw.text(
+                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
+                text,
+                font=self.font,
+                fill=self.fontColor,
+            )
+        self.postProcess()
+
+        time.sleep(3)
 
         # move to home page
         self.global_state = 0

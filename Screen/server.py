@@ -1,4 +1,4 @@
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import SimpleHTTPRequestHandler
 import requests
 from datetime import datetime
 import threading
@@ -6,30 +6,34 @@ import socket
 import psutil
 import json
 
-class handler(SimpleHTTPRequestHandler):
-  def do_GET(self):
-    self.send_response(200)
-    self.send_header('Content-type','text/html')
-    self.end_headers()
+def make_handler(screen):
+  class Handler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+      self.send_response(200)
+      self.send_header('Content-type','text/html')
+      self.end_headers()
 
-    message = "Hello, World! Here is a GET response"
-    self.wfile.write(bytes(message, "utf8"))
+      message = "Hello, World! Here is a GET response"
+      self.wfile.write(bytes(message, "utf8"))
 
-  def do_POST(self):
-    self.send_response(200)
-    self.send_header('Content-type','text/html')
-    self.end_headers()
+    def do_POST(self):
+      self.send_response(200)
+      self.send_header('Content-type','text/html')
+      self.end_headers()
 
-    self.data_string = self.rfile.read(int(self.headers['Content-Length']))
-    data = json.loads(self.data_string)
-    print(data['id'])
+      self.data_string = self.rfile.read(int(self.headers['Content-Length']))
+      data = json.loads(self.data_string)
+      
+      # save to file
+      with open("screen_config.txt", "w") as myfile:
+        myfile.write("screen=" + str(data['id']))
+      screen.screen_id = str(data['id'])
+      screen.global_state = -1
 
-    message = "Hello, World! Here is a POST response"
-    self.wfile.write(bytes(message, "utf8"))
+      message = "Hello, World! Here is a POST response"
+      self.wfile.write(bytes(message, "utf8"))
 
-def server():
-  httpd = HTTPServer(('0.0.0.0', 8000), handler)
-  httpd.serve_forever()
+  return Handler
 
 def get_ip_address():
   info = dict()
@@ -42,27 +46,3 @@ def get_ip_address():
               if str(connif.family.name) == 'AF_INET':
                   info[conn[:17]] = connif.address
   return info['wlan0']
-
-s = threading.Thread(target=server)
-s.start()
-
-# httpd = HTTPServer(('0.0.0.0', 8000), handler)
-# httpd.serve_forever()
-
-url = 'http://54.234.70.84:8000/pairings/create/'
-
-startTime = datetime.now()
-sent = False
-while True:
-  currentTime = datetime.now()
-  timeDelta = int((currentTime - startTime).total_seconds())
-  if timeDelta % 10 == 0:
-    if not sent:
-      data = {
-        'ip': get_ip_address(),
-      }
-      # response = requests.post(url, json=data)
-      # print(response.text)
-      sent = True
-  elif sent:
-    sent = False
