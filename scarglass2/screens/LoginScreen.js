@@ -11,7 +11,6 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
-import LoginScreen from "react-native-login-screen";
 import axios from "axios";
 
 let BASE_URL = "http://54.234.70.84:8000/";
@@ -71,7 +70,7 @@ const LoginScreenPage = ({ navigation }) => {
       }
     }
     fetchData("access");
-  }, []);
+  }, [loading]);
 
   return (
     <View style={styles.mainBody}>

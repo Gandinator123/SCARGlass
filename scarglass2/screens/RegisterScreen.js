@@ -15,7 +15,7 @@ import axios from "axios";
 
 let BASE_URL = "http://54.234.70.84:8000/";
 
-const RegisterScreen = (props) => {
+const RegisterScreen = ({ navigation }) => {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -26,7 +26,7 @@ const RegisterScreen = (props) => {
   const emailInputRef = createRef();
   const passwordInputRef = createRef();
 
-  const handleSubmitButton = ({navigation}) => {
+  const handleSubmitButton = () => {
     setErrortext("");
     if (!userName) {
       alert("Please fill Name");
@@ -59,7 +59,7 @@ const RegisterScreen = (props) => {
         setLoading(false);
       });
   };
-  console.log(isRegistraionSuccess)
+  console.log(isRegistraionSuccess);
   if (isRegistraionSuccess) {
     return (
       <View
@@ -80,7 +80,7 @@ const RegisterScreen = (props) => {
         <TouchableOpacity
           style={styles.buttonStyle}
           activeOpacity={0.5}
-          onPress={() => navigation.navigate("LoginScreen")}
+          onPress={() => navigation.navigate("LoginScreenPage")}
         >
           <Text style={styles.buttonTextStyle}>Login Now</Text>
         </TouchableOpacity>

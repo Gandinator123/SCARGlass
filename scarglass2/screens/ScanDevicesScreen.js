@@ -1,32 +1,19 @@
-// Import React and Component
-import React, { useState, createRef, Component, navigation, useEffect } from "react";
-import { Constants } from 'expo';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  Image,
-  KeyboardAvoidingView,
-  Keyboard,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 import axios from "axios";
+import api from "../api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-let BASE_URL = "http://54.234.70.84:8000/";
-
-const ScanDevicesScreen = ({navigation,setPaired}) => {
+const ScanDevicesScreen = ({ setPaired }) => {
   const [errortext, setErrortext] = useState("");
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
   const [timeDelay, setDelay] = useState(false);
   const [broadcasting, setbroadcasting] = useState(false);
 
   if (isRegistraionSuccess) {
-
     setTimeout(() => {
-        setPaired(true)
-      }, 5000)
+      setPaired(true);
+    }, 5000);
 
     return (
       <View
@@ -44,50 +31,106 @@ const ScanDevicesScreen = ({navigation,setPaired}) => {
           }}
         />
         <Text style={styles.successTextStyle}>Pairing successful!</Text>
-
       </View>
-      
     );
   }
 
   setTimeout(() => {
-    setDelay(!timeDelay)
-  }, 5000)
+    setDelay(!timeDelay);
+  }, 5000);
 
-  const sendIPs = (ips) => {
-    setbroadcasting(true);
-    console.log("in broadcasting")
-    for (var ip in ips) {
-        //ips[ip].ip
-        console.log(ips[ip].ip);
-        let url = 'http://' + ips[ip].ip + ':8000/';
-        console.log(url)
-        axios
-            .get(url, {timeout: 2000})
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
+  const saveScreen = async (id, url) => {
+    try {
+      let res = await axios({
+        url: url,
+        method: "post",
+        data: { id: id },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.status === 200) {
+        console.log("200 OK");
+        setPaired(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const createScreen = async (url) => {
+    api
+      .createScreen()
+      .then((response) => {
+        console.log(response.data);
+        saveScreen(response.data["id"], url);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          // unauthorized: refresh cookie
+          api.refresh().then((response) => {
+            // refreshed: try again
+            AsyncStorage.setItem("access", response.data["access"]).then(() => {
+              api
+                .createScreen()
+                .then((resp) => {
+                  console.log(resp.data);
+                  saveScreen(resp.data["id"], url);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
             });
-    }    
+          });
+        } else {
+          console.log(error);
+        }
+      });
+  };
+
+  const ping = async (ips) => {
+    setbroadcasting(true);
+    for (var ip in ips) {
+      //ips[ip].ip
+      let url = "http://" + ips[ip].ip + ":8000/";
+
+      try {
+        let res = await axios({
+          url: url,
+          method: "get",
+          timeout: 2000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (res.status === 200) {
+          console.log("200 OK");
+
+          // post to create screen
+          createScreen(url);
+          break;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
     setbroadcasting(false);
   };
 
   useEffect(() => {
     if (timeDelay && !broadcasting) {
-      axios
-      .get(BASE_URL + "pairings/", {params: {pair: true}})
-      .then((response) => {
-        //setIsRegistraionSuccess(true);
-        console.log(response.data)
-        sendIPs(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      api
+        .getAllPairings()
+        .then((response) => {
+          //setIsRegistraionSuccess(true);
+          console.log(response.data);
+          ping(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  }, [timeDelay])
+  }, [timeDelay]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -98,12 +141,17 @@ const ScanDevicesScreen = ({navigation,setPaired}) => {
           alignContent: "center",
         }}
       >
-        <View style={{ alignItems: "center", margin:100 }}>
-        <Image
-        source={require("../assets/loading.gif")} />
-        <Text 
-        style={styles.registerTextStyle}>
-        Finding a device to pair</Text>
+        <View
+          style={{
+            alignItems: "center",
+            margin: 100,
+            alignSelf: "center",
+            justifyContent: "center",
+            top: 100,
+          }}
+        >
+          <Image source={require("../assets/loading.gif")} />
+          <Text style={styles.registerTextStyle}>Finding a device to pair</Text>
         </View>
       </ScrollView>
     </View>
@@ -161,10 +209,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingTop: 50,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: "#ecf0f1",
   },
   registerTextStyle: {
     color: "black",

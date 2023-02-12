@@ -3,26 +3,37 @@ import { Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import axios from "axios";
 import ColorPicker from "react-native-wheel-color-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 let BASE_URL = "http://54.234.70.84:8000/";
 
 const HomeScreen = () => {
+  const [id, setId] = useState(null);
+  useEffect(() => {
+    const setScreen = async () => {
+      let screen = await AsyncStorage.getItem("screen");
+      setId(screen);
+    };
+    setScreen();
+  }, []);
   const [loaded, setLoaded] = useState(false);
 
   const [homePageData, setHomePageData] = useState(null);
   useEffect(() => {
-    axios
-      .get(BASE_URL + "screens/1/")
-      .then((response) => {
-        setHomePageData(response.data);
-        setLoaded(true);
-        // console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoaded(true);
-      });
-  }, []);
+    if (id) {
+      axios
+        .get(BASE_URL + "screens/" + id + "/")
+        .then((response) => {
+          setHomePageData(response.data);
+          setLoaded(true);
+          // console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoaded(true);
+        });
+    }
+  }, [id]);
 
   const [timeFormatOpen, setTimeFormatOpen] = useState(false);
   const [timeFormatValue, setTimeFormatValue] = useState(0);
@@ -55,7 +66,7 @@ const HomeScreen = () => {
 
   const updateScreen = () => {
     axios
-      .put(BASE_URL + "screens/1/update/", {
+      .put(BASE_URL + "screens/" + id + "/update/", {
         date_format: dateFormatValue,
         time_format: timeFormatValue,
         day_format: dayFormatValue,
