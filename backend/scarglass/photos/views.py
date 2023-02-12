@@ -14,6 +14,7 @@ from imutils.perspective import four_point_transform
 import sys
 from io import BytesIO
 from django.core.files import File
+from scarglass.settings import MEDIA_URL
 
 class PhotoList(generics.ListAPIView):
   
@@ -60,7 +61,6 @@ class PhotoCreate(views.APIView):
     elif img_type == '3':
       # PDF
       temp = copy.deepcopy(request.data['photo'])
-      print(temp.name)
       big_img = cv2.imdecode(numpy.fromstring(temp.read(), numpy.uint8), cv2.IMREAD_COLOR)
       ratio = big_img.shape[0] / 500.0
       org = big_img.copy()
@@ -90,16 +90,17 @@ class PhotoCreate(views.APIView):
 
       new = Image.fromarray(img)
 
-      imgio = BytesIO()
-      new.save(imgio, 'JPEG', quality=85)
+      # new.save(, 'JPEG', quality=85)
+      path = MEDIA_URL + temp.name + '.pdf'
+      print(path)
       
-      request.data._mutable = True
-      request.data['photo'] = File(imgio, name=temp.name)
-      request.data._mutable = False
+      # request.data._mutable = True
+      # request.data['photo'] = File(imgio, name=temp.name)
+      # request.data._mutable = False
 
     serializer = PhotoSerializer(data=request.data)
     if serializer.is_valid():
-      serializer.save()
+      # serializer.save()
       return response.Response(serializer.data, status=status.HTTP_200_OK)
     return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
