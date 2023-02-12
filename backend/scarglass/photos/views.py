@@ -93,9 +93,13 @@ class PhotoCreate(views.APIView):
 
       # new.save(, 'JPEG', quality=85)
       path, ext = os.path.splitext(temp.name)
-      path = MEDIA_URL + path + '.pdf'
-      new.save(path, format="PDF")
-      
+      p = MEDIA_URL + path + '.pdf'
+      new.save(p, format="PDF")
+
+      request.data._mutable = True
+      request.data['text'] = p
+      request.data._mutable = False
+
       # request.data._mutable = True
       # request.data['photo'] = File(imgio, name=temp.name)
       # request.data._mutable = False
