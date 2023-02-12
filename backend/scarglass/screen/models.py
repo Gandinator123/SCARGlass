@@ -38,4 +38,9 @@ class ScreenModel(models.Model):
   font_green = models.IntegerField(default=0)
   font_blue = models.IntegerField(default=0)
 
-  scroll_speed = models.IntegerField(default=10)
+  SCROLL_SPEED_CHOICES = (
+    (0, 5),
+    (1, 10),
+    (2, 20),
+  )
+  scroll_speed = models.IntegerField(choices=SCROLL_SPEED_CHOICES, default=1)
