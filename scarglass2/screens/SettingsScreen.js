@@ -23,7 +23,7 @@ const removeData = async (key) => {
 };
 
 // stack components
-function SettingsScreen() {
+function SettingsScreen({name, navigation}) {
   const switchoptions = [
     { label: "On", value: "tall" },
     { label: "Off", value: "average" },
@@ -40,7 +40,8 @@ function SettingsScreen() {
   return (
     <View>
       <ScrollView>
-        <Text style={styles.hellotext}>Hello Rohan!</Text>
+        <Text style={styles.hellotext}>Hello {name}!</Text>
+        <Text style={styles.settingtypetext}>Glasses settings</Text>
         <SafeAreaView>
           <View>
             <Text style={styles.sectionTitle}>
@@ -116,6 +117,7 @@ function SettingsScreen() {
             removeData("access");
             removeData("refresh");
             removeData("screen");
+            navigation.replace('LoginScreen')
           }}
         >
           <Text style={styles.buttonTextStyle}>Sign out</Text>
@@ -137,6 +139,13 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingHorizontal: 5,
     fontSize: 50,
+    fontWeight: "bold",
+  },
+  settingtypetext : {
+    marginTop: 30,
+    paddingTop: 5,
+    paddingHorizontal: 5,
+    fontSize: 25,
     fontWeight: "bold",
   },
   buttonStyle: {

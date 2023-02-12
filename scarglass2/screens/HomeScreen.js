@@ -6,6 +6,7 @@ import ColorPicker from "react-native-wheel-color-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 let BASE_URL = "http://54.234.70.84:8000/";
+DropDownPicker.setTheme("LIGHT");
 
 const HomeScreen = () => {
   const [id, setId] = useState(null);
@@ -155,7 +156,7 @@ const HomeScreen = () => {
 
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
-      <Text>Time format:</Text>
+      <Text  style={{ fontWeight: 'bold'}}>Time format:</Text>
       <DropDownPicker
         zIndex={3000}
         open={timeFormatOpen}
@@ -188,7 +189,7 @@ const HomeScreen = () => {
       />
       <View style={{ height: 300, margin: 20, flexDirection: "row" }}>
         <View>
-          <Text>Background color:</Text>
+          <Text style={{left: 10}}>Background color:</Text>
           <ColorPicker
             color={
               "#" +
