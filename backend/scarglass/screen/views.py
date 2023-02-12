@@ -11,7 +11,8 @@ class ScreenCreate(views.APIView):
   permission_classes = (permissions.IsAuthenticated,)
 
   def post(self, request, format=None):
-    user = request.user.id
+    print(request.user.id)
+    user = request.user
     request.data['user'] = user
     serializer = ScreenSerializer(data=request.data)
     if serializer.is_valid():

@@ -34,6 +34,7 @@ const ScanDevicesScreen = ({ setPaired }) => {
       });
       if (res.status === 200) {
         console.log("200 OK");
+        AsyncStorage.setItem("screen_id", id.toString());
         setPaired(true);
       }
     } catch (err) {
