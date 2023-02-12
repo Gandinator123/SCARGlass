@@ -94,7 +94,7 @@ class PhotoCreate(views.APIView):
       # new.save(, 'JPEG', quality=85)
       path, ext = os.path.splitext(temp.name)
       path = MEDIA_URL + path + '.pdf'
-      print(path)
+      new.save(path, format="PDF")
       
       # request.data._mutable = True
       # request.data['photo'] = File(imgio, name=temp.name)
@@ -102,7 +102,7 @@ class PhotoCreate(views.APIView):
 
     serializer = PhotoSerializer(data=request.data)
     if serializer.is_valid():
-      # serializer.save()
+      serializer.save()
       return response.Response(serializer.data, status=status.HTTP_200_OK)
     return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
