@@ -66,6 +66,7 @@ const RegisterScreen = ({ navigation }) => {
         style={{
           flex: 1,
           justifyContent: "center",
+          backgroundColor: 'white'
         }}
       >
         <Image
@@ -89,7 +90,7 @@ const RegisterScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: 'white'}}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{

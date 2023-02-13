@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 import axios from "axios";
 import api from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { back } from "react-native/Libraries/Animated/Easing";
 
 const ScanDevicesScreen = ({ setPaired }) => {
   const [errortext, setErrortext] = useState("");
@@ -14,7 +15,7 @@ const ScanDevicesScreen = ({ setPaired }) => {
     if (isRegistraionSuccess) {
       setTimeout(() => {
         setPaired(true);
-      }, 5000)
+      }, 1000)
     }
   }, [isRegistraionSuccess])
 
@@ -121,6 +122,7 @@ const ScanDevicesScreen = ({ setPaired }) => {
   style={{
     flex: 1,
     justifyContent: "center",
+    backgroundColor: 'white'
   }}
 >
   <Image
@@ -133,7 +135,7 @@ const ScanDevicesScreen = ({ setPaired }) => {
   />
   <Text style={styles.successTextStyle}>Pairing successful!</Text>
 </View> : (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1}}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{

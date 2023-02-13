@@ -13,7 +13,8 @@
       "objectFit": "scale-down"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/..."
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {

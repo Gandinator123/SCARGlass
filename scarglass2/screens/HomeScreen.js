@@ -155,8 +155,8 @@ const HomeScreen = () => {
   let SCREEN_HEIGHT = 84;
 
   return (
-    <View style={{ flex: 1, alignItems: "center" }}>
-      <Text  style={{ fontWeight: 'bold'}}>Time format:</Text>
+    <View style={{ flex: 1, alignItems: "center", backgroundColor:'white' }}>
+      <Text style={{ fontWeight: 'bold'}}>Time format:</Text>
       <DropDownPicker
         zIndex={3000}
         open={timeFormatOpen}
@@ -166,7 +166,7 @@ const HomeScreen = () => {
         setValue={setTimeFormatValue}
         setItems={setTimeFormatItems}
       />
-      <Text>Date format:</Text>
+      <Text style={{ fontWeight: 'bold'}}>Date format:</Text>
       <DropDownPicker
         zIndex={2000}
         open={dateFormatOpen}
@@ -176,7 +176,7 @@ const HomeScreen = () => {
         setValue={setDateFormatValue}
         setItems={setDateFormatItems}
       />
-      <Text>Day format:</Text>
+      <Text style={{ fontWeight: 'bold'}}>Day format:</Text>
       <DropDownPicker
         zIndex={1000}
         open={dayFormatOpen}
@@ -189,7 +189,7 @@ const HomeScreen = () => {
       />
       <View style={{ height: 300, margin: 20, flexDirection: "row" }}>
         <View>
-          <Text style={{left: 10}}>Background color:</Text>
+          <Text style={{left: 10, fontWeight: 'bold'}}>Background color:</Text>
           <ColorPicker
             color={
               "#" +
@@ -218,7 +218,7 @@ const HomeScreen = () => {
           />
         </View>
         <View>
-          <Text>Font color:</Text>
+          <Text style={{ fontWeight: 'bold'}}>Font color:</Text>
           <ColorPicker
             color={
               "#" +
@@ -247,7 +247,7 @@ const HomeScreen = () => {
           />
         </View>
       </View>
-      <Text>Preview:</Text>
+      <Text style={{ fontWeight: 'bold'}}>Preview:</Text>
       <View
         style={{
           borderColor: "black",

@@ -120,6 +120,7 @@ function ResponsesScreen({ navigation }) {
         justifyContent: "center",
         alignItems: "center",
         paddingTop: 30,
+        backgroundColor:'white'
       }}
     >
       <Button

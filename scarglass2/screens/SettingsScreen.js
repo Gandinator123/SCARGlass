@@ -11,6 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import SwitchSelector from "react-native-switch-selector";
+import { useNavigation } from '@react-navigation/native';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -23,7 +24,8 @@ const removeData = async (key) => {
 };
 
 // stack components
-function SettingsScreen({name, navigation}) {
+function SettingsScreen({name}) {
+  const navigation = useNavigation(); 
   const switchoptions = [
     { label: "On", value: "tall" },
     { label: "Off", value: "average" },
@@ -36,92 +38,32 @@ function SettingsScreen({name, navigation}) {
     { label: "Slow", value: "tall" },
     { label: "Normal", value: "average" },
     { label: "Fast", value: "average" },
+    { label: "Fast", value: "average" },
   ];
+  const timeformat = [
+    { label: "HH:MM:SS (24 hr)", value: 0 },
+    { label: "HH:MM (24 hr)", value: 1 },
+    { label: "HH:MM:SS AM/PM", value: 2 },
+    { label: "HH:MM AM/PM", value: 3 },
+  ]
   return (
-    <View>
+    <View style={{backgroundColor:'white'}}>
       <ScrollView>
         <Text style={styles.hellotext}>Hello {name}!</Text>
-        <Text style={styles.settingtypetext}>Glasses settings</Text>
-        <SafeAreaView>
-          <View>
-            <Text style={styles.sectionTitle}>
-              {""}
-              Screen font size
-            </Text>
-          </View>
-        </SafeAreaView>
-        <View>
-          <SwitchSelector
-            buttonColor={"black"}
-            options={fontoptions}
-            initial={0}
-            onPress={(value) => console.log(value)}
-            buttonMargin={10}
-          />
-        </View>
-
-        <SafeAreaView>
-          <View>
-            <Text style={styles.sectionTitle}>
-              {""}
-              Screen scroll speed
-            </Text>
-          </View>
-        </SafeAreaView>
-        <View>
-          <SwitchSelector
-            buttonColor={"black"}
-            options={scrolloptions}
-            initial={0}
-            onPress={(value) => console.log(value)}
-            buttonMargin={10}
-          />
-        </View>
-
-        <SafeAreaView>
-          <View>
-            <Text style={styles.sectionTitle}>Some settings</Text>
-          </View>
-        </SafeAreaView>
-        <View>
-          <SwitchSelector
-            buttonColor={"black"}
-            options={switchoptions}
-            initial={0}
-            onPress={(value) => console.log(value)}
-            buttonMargin={10}
-          />
-        </View>
-
-        <SafeAreaView>
-          <View>
-            <Text style={styles.sectionTitle}>
-              {""}
-              Some more settings
-            </Text>
-          </View>
-        </SafeAreaView>
-        <View>
-          <SwitchSelector
-            buttonColor={"black"}
-            options={switchoptions}
-            initial={0}
-            onPress={(value) => console.log(value)}
-            buttonMargin={10}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          activeOpacity={0.5}
-          onPress={() => {
-            removeData("access");
-            removeData("refresh");
-            removeData("screen");
-            navigation.replace('LoginScreen')
-          }}
-        >
-          <Text style={styles.buttonTextStyle}>Sign out</Text>
-        </TouchableOpacity>
+        <Text style={styles.settingtypetext}>b</Text>
+        
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            activeOpacity={0.5}
+            onPress={() => {
+              removeData("access");
+              removeData("refresh");
+              removeData("screen");
+              navigation.navigate('Auth', { screen: 'LoginScreenPage' })
+            }}
+          >
+            <Text style={styles.buttonTextStyle}>Sign out</Text>
+          </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -155,7 +97,7 @@ const styles = StyleSheet.create({
     borderColor: "#7DE24E",
     height: 50,
     alignItems: "center",
-    borderRadius: 30,
+    borderRadius: 20,
     marginLeft: 35,
     marginRight: 35,
     marginTop: 20,
@@ -170,3 +112,72 @@ const styles = StyleSheet.create({
 });
 
 export default SettingsScreen;
+
+// <SafeAreaView>
+//           <View>
+//             <Text style={styles.sectionTitle}>
+//               {""}
+//               Screen font size
+//             </Text>
+//           </View>
+//         </SafeAreaView>
+//         <View>
+//           <SwitchSelector
+//             buttonColor={"black"}
+//             options={fontoptions}
+//             initial={0}
+//             onPress={(value) => console.log(value)}
+//             buttonMargin={10}
+//           />
+//         </View>
+
+//         <SafeAreaView>
+//           <View>
+//             <Text style={styles.sectionTitle}>
+//               {""}
+//               Screen scroll speed
+//             </Text>
+//           </View>
+//         </SafeAreaView>
+//         <View>
+//           <SwitchSelector
+//             buttonColor={"black"}
+//             options={timeformat}
+//             initial={0}
+//             onPress={(value) => console.log(value)}
+//             buttonMargin={5}
+//           />
+//         </View>
+
+//         <SafeAreaView>
+//           <View>
+//             <Text style={styles.sectionTitle}>Some settings</Text>
+//           </View>
+//         </SafeAreaView>
+//         <View>
+//           <SwitchSelector
+//             buttonColor={"black"}
+//             options={switchoptions}
+//             initial={0}
+//             onPress={(value) => console.log(value)}
+//             buttonMargin={5}
+//           />
+//         </View>
+
+//         <SafeAreaView>
+//           <View>
+//             <Text style={styles.sectionTitle}>
+//               {""}
+//               Some more settings
+//             </Text>
+//           </View>
+//         </SafeAreaView>
+//         <View>
+//           <SwitchSelector
+//             buttonColor={"black"}
+//             options={switchoptions}
+//             initial={0}
+//             onPress={(value) => console.log(value)}
+//             buttonMargin={10}
+//           />
+//         </View>

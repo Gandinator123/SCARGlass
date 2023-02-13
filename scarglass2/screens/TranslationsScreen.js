@@ -105,7 +105,7 @@ const TranslationScreen = () => {
     return (
       <ScrollView refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={() => setRefreshing(!refreshing)} />
-      }>
+      } style={{backgroundColor:'white'}}>
       <View style={styles.background}
       >
       {renderPhotos}
@@ -120,7 +120,8 @@ const TranslationScreen = () => {
       flex: 1,
       flexDirection: 'row',
       flexWrap: "wrap",
-      margin: 2
+      margin: 2,
+      backgroundColor: 'white'
 
     },
     overlay : {

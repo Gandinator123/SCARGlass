@@ -50,16 +50,16 @@ const ChatGPTresponses = () => {
     const renderResponses = responses.map((response) => (
 
         <View key={response.id}>
-        <Text style={styles.MainContainer}>
+        <TouchableOpacity style={styles.MainContainer} onLongPress={() => deleteFunction(response.id)}>
         <Text style={styles.QuestionStyle}>Question: {response.question}?{'\n'}</Text>
         <Text style={styles.Responsestyle}>ChatGPT: {response.response}</Text>
-        </Text>
+        </TouchableOpacity>
         </View>      
     ));
   
       return (
-        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => setRefreshing(!refreshing)} />}>
-        <View style={styles.background}>
+        <ScrollView style={{backgroundColor:'white'}} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => setRefreshing(!refreshing)} />}>
+        <View style={{backgroundColor: 'white'}}>
         {renderResponses}
         </View>
         </ScrollView>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyCContent: "center",
         paddingVertical: 12,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         borderRadius: 20,
         margin : 15,
         elevation: 3,
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         padding : 2,
         fontSize: 25,
-        textAlign: 'center',
-        margin: 10
+        textAlign: 'left',
+
       },
       Responsestyle : {
         borderRadius: 30,
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
         // Adding padding on Text component.
         padding : 2,
         fontSize: 25,
-        textAlign: 'center',
-        margin: 10,
+        textAlign: 'auto',
+        margin: 5,
         fontStyle: 'italic'
       }
 
