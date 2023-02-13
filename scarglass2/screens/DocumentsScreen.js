@@ -128,6 +128,7 @@ const DocumentsScreen = () => {
           onRefresh={() => setRefreshing(!refreshing)}
         />
       }
+      style={{backgroundColor:'white'}}
     >
       <View style={styles.background}>{renderPhotos}</View>
     </ScrollView>
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     margin: 2,
+    backgroundColor : 'white'
   },
   overlay: {
     position: "absolute",
