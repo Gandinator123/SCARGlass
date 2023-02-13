@@ -117,9 +117,8 @@ function ResponsesScreen({ navigation }) {
       style={{
         flexDirection: "row",
         flexWrap: "wrap",
-        justifyContent: "flex-start",
-        alignItems: "baseline",
-        margin: 20,
+        justifyContent: "center",
+        alignItems: "center",
         paddingTop: 30,
       }}
     >
@@ -304,12 +303,14 @@ const Stack = createNativeStackNavigator();
 const MainApp = () => {
   const [loading, setLoading] = useState(true);
   const [paired, setPaired] = useState(false);
+  const [name, setName] = useState('');
   useEffect(() => {
     // check if user is associated with screen
     api
       .getUser()
       .then((response) => {
         console.log(response);
+        setName(response.data[0].name);
         if (response.data[0].screens.length > 0) {
           AsyncStorage.setItem(
             "screen",
@@ -376,7 +377,7 @@ const MainApp = () => {
     >
       <Tab.Screen name="Home" component={HomeStackScreen} />
       <Tab.Screen name="Responses" component={ResponsesStackScreen} />
-      <Tab.Screen name="Settings" component={SettingsStackScreen} />
+      <Tab.Screen name="Settings" children ={() => <SettingsScreen name={name}/>}/>
     </Tab.Navigator>
   ) : (
     <ScanDevicesScreen setPaired={setPaired} />

@@ -10,30 +10,13 @@ const ScanDevicesScreen = ({ setPaired }) => {
   const [timeDelay, setDelay] = useState(false);
   const [broadcasting, setbroadcasting] = useState(false);
 
-  if (isRegistraionSuccess) {
-    setTimeout(() => {
-      setPaired(true);
-    }, 5000);
-
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-        }}
-      >
-        <Image
-          source={require("./../assets/tick.png")}
-          style={{
-            height: 150,
-            resizeMode: "contain",
-            alignSelf: "center",
-          }}
-        />
-        <Text style={styles.successTextStyle}>Pairing successful!</Text>
-      </View>
-    );
-  }
+  useEffect(() => {
+    if (isRegistraionSuccess) {
+      setTimeout(() => {
+        setPaired(true);
+      }, 5000)
+    }
+  }, [isRegistraionSuccess])
 
   setTimeout(() => {
     setDelay(!timeDelay);
@@ -123,9 +106,10 @@ const ScanDevicesScreen = ({ setPaired }) => {
       api
         .getAllPairings()
         .then((response) => {
-          //setIsRegistraionSuccess(true);
+          setIsRegistraionSuccess(true);
           console.log(response.data);
-          ping(response.data);
+          //ping(response.data);
+          // setPaired(true);
         })
         .catch((error) => {
           console.log(error);
@@ -133,7 +117,22 @@ const ScanDevicesScreen = ({ setPaired }) => {
     }
   }, [timeDelay]);
 
-  return (
+  return isRegistraionSuccess ? <View
+  style={{
+    flex: 1,
+    justifyContent: "center",
+  }}
+>
+  <Image
+    source={require("./../assets/tick.png")}
+    style={{
+      height: 150,
+      resizeMode: "contain",
+      alignSelf: "center",
+    }}
+  />
+  <Text style={styles.successTextStyle}>Pairing successful!</Text>
+</View> : (
     <View style={{ flex: 1 }}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
