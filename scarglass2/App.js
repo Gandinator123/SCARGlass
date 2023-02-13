@@ -305,6 +305,8 @@ const MainApp = () => {
   const [loading, setLoading] = useState(true);
   const [paired, setPaired] = useState(false);
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [screenID, setscreenID] = useState('');
   useEffect(() => {
     // check if user is associated with screen
     api
@@ -312,7 +314,9 @@ const MainApp = () => {
       .then((response) => {
         console.log(response);
         setName(response.data[0].name);
+        setEmail(response.data[0].email);
         if (response.data[0].screens.length > 0) {
+          setscreenID(response.data[0].screens[0].id.toString());
           AsyncStorage.setItem(
             "screen",
             response.data[0].screens[0].id.toString()
@@ -363,10 +367,10 @@ const MainApp = () => {
 
           if (route.name === "Home") {
             iconName = focused ? "ios-home" : "ios-home-outline";
-          } else if (route.name === "Responses") {
-            iconName = focused ? "ios-albums" : "ios-albums-outline";
-          } else if (route.name === "Settings") {
-            iconName = focused ? "ios-settings" : "ios-settings-outline";
+          } else if (route.name === "Customize") {
+            iconName = focused ? "ios-options" : "ios-options-outline";
+          } else if (route.name === "Account") {
+            iconName = focused ? "ios-people" : "ios-people-outline";
           }
 
           // You can return any component that you like here!
@@ -376,9 +380,9 @@ const MainApp = () => {
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <Tab.Screen name="Home" component={HomeStackScreen} />
-      <Tab.Screen name="Responses" component={ResponsesStackScreen} />
-      <Tab.Screen name="Settings" children ={() => <SettingsScreen name={name}/>}/>
+      <Tab.Screen name="Home" component={ResponsesStackScreen} />
+      <Tab.Screen name="Customize" component={HomeStackScreen} />
+      <Tab.Screen name="Account" children ={() => <SettingsScreen name={name} email={email} screenID={screenID}/>}/>
     </Tab.Navigator>
   ) : (
     <ScanDevicesScreen setPaired={setPaired} />

@@ -24,33 +24,29 @@ const removeData = async (key) => {
 };
 
 // stack components
-function SettingsScreen({name}) {
+function SettingsScreen({name, email, screenID}) {
   const navigation = useNavigation(); 
-  const switchoptions = [
-    { label: "On", value: "tall" },
-    { label: "Off", value: "average" },
-  ];
-  const fontoptions = [
-    { label: "Normal", value: "tall" },
-    { label: "Large", value: "average" },
-  ];
-  const scrolloptions = [
-    { label: "Slow", value: "tall" },
-    { label: "Normal", value: "average" },
-    { label: "Fast", value: "average" },
-    { label: "Fast", value: "average" },
-  ];
-  const timeformat = [
-    { label: "HH:MM:SS (24 hr)", value: 0 },
-    { label: "HH:MM (24 hr)", value: 1 },
-    { label: "HH:MM:SS AM/PM", value: 2 },
-    { label: "HH:MM AM/PM", value: 3 },
-  ]
   return (
     <View style={{backgroundColor:'white'}}>
-      <ScrollView>
         <Text style={styles.hellotext}>Hello {name}!</Text>
-        <Text style={styles.settingtypetext}>b</Text>
+          <View style={styles.MainContainer}> 
+              <Text style={styles.settingtypetext}>Email</Text>
+              <Text style={styles.settingdatatext}>{email}</Text>
+          </View>
+          <View style={styles.MainContainer}> 
+              <Text style={styles.settingtypetext}>Screen ID</Text>
+              <Text style={styles.settingdatatext}>{screenID}</Text>
+          </View>
+          <View style={styles.MainContainer}> 
+              <Text style={styles.settingtypetext}>Model</Text>
+              <Text style={styles.settingdatatext}>SCARGlass 1</Text>
+          </View>
+          <View style={styles.MainContainer}> 
+              <Text style={styles.settingtypetext}>Specs</Text>
+              <Text style={styles.settingdata2text}>0.96 inch 80x160 RGB Oled display</Text>
+              <Text style={styles.settingdata2text}>1080p 5MP Camera</Text>
+              <Text style={styles.settingdata2text}>Air temperature and humidity sensor	 </Text>
+          </View>
         
           <TouchableOpacity
             style={styles.buttonStyle}
@@ -64,12 +60,23 @@ function SettingsScreen({name}) {
           >
             <Text style={styles.buttonTextStyle}>Sign out</Text>
           </TouchableOpacity>
-      </ScrollView>
+
+          <Text style={styles.lighttext}>Version 1.0</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  MainContainer: {
+ 
+    alignItems: "center",
+    justifyCContent: "center",
+    padding: 10,
+    elevation: 3,
+    backgroundColor: "white",
+    marginBottom: 10
+ 
+},
   sectionTitle: {
     fontSize: 24,
     fontWeight: "900",
@@ -77,18 +84,36 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   hellotext: {
-    marginTop: 30,
-    paddingTop: 5,
+    marginTop: 10,
+    paddingTop: 10,
+    paddingBottom: 20,
     paddingHorizontal: 5,
     fontSize: 50,
     fontWeight: "bold",
   },
   settingtypetext : {
-    marginTop: 30,
-    paddingTop: 5,
-    paddingHorizontal: 5,
+    alignSelf: 'baseline',
     fontSize: 25,
     fontWeight: "bold",
+  },
+  settingdatatext : {
+    alignSelf: 'baseline',
+    fontSize: 20,
+    fontWeight: "200",
+    marginVertical: 7
+  },
+  settingdata2text : {
+    alignSelf: 'baseline',
+    fontSize: 14,
+    fontWeight: "200",
+    marginVertical: 3
+  },
+  lighttext : {
+    marginTop: 10,
+    marginBottom: 200,
+    alignSelf: 'center',
+    fontSize: 15,
+    fontWeight: "100",
   },
   buttonStyle: {
     backgroundColor: "#000000",
@@ -112,6 +137,28 @@ const styles = StyleSheet.create({
 });
 
 export default SettingsScreen;
+
+
+// const switchoptions = [
+//   { label: "On", value: "tall" },
+//   { label: "Off", value: "average" },
+// ];
+// const fontoptions = [
+//   { label: "Normal", value: "tall" },
+//   { label: "Large", value: "average" },
+// ];
+// const scrolloptions = [
+//   { label: "Slow", value: "tall" },
+//   { label: "Normal", value: "average" },
+//   { label: "Fast", value: "average" },
+//   { label: "Fast", value: "average" },
+// ];
+// const timeformat = [
+//   { label: "HH:MM:SS (24 hr)", value: 0 },
+//   { label: "HH:MM (24 hr)", value: 1 },
+//   { label: "HH:MM:SS AM/PM", value: 2 },
+//   { label: "HH:MM AM/PM", value: 3 },
+// ]
 
 // <SafeAreaView>
 //           <View>

@@ -45,6 +45,7 @@ const PictureModal = ({photo}) => {
           style={{
             width: 350,
             height: 250,
+            resizeMode: 'contain'
           }}
           source={{
             uri: photo['photo']

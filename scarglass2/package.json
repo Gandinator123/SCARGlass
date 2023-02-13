@@ -16,6 +16,7 @@
     "@react-navigation/native-stack": "^6.9.8",
     "axios": "^1.2.5",
     "expo": "~47.0.12",
+    "expo-file-system": "~15.1.1",
     "expo-status-bar": "~1.4.2",
     "install": "^0.13.0",
     "prettier": "^2.8.3",
@@ -35,7 +36,7 @@
     "react-native-switch-selector": "^2.3.0",
     "react-native-text-input-interactive": "^0.1.4",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-webview": "^11.26.1",
+    "react-native-webview": "11.23.1",
     "react-native-wheel-color-picker": "^1.2.0"
   },
   "devDependencies": {

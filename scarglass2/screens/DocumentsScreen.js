@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import * as FileSystem from 'expo-file-system';
 import {
   Text,
   View,
@@ -39,8 +40,27 @@ const deleteFunction = (photo_id) => {
   );
 };
 
+
+const makeDownload = () => {
+  let link = image_url.slice(0,-4);
+  let pdf = link + '.pdf'
+  FileSystem.downloadAsync(
+   pdf,
+   FileSystem.documentDirectory + 'small.pdf'
+ )
+   .then(({ uri }) => {
+     console.log('Finished downloading to ', uri);
+   })
+   .catch(error => {
+     console.error(error);
+   });
+
+};
+
+
 const Documentsmodal = ({ photo }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [download, setDownload] = useState(false);
 
   console.log("PHOTO: ", photo);
   let translation = photo["text"];
@@ -72,11 +92,7 @@ const Documentsmodal = ({ photo }) => {
         </TouchableOpacity>
       </Modal>
       <TouchableOpacity
-        onPress={() => {
-          Linking.openURL(
-            "http://samples.leanpub.com/thereactnativebook-sample.pdf"
-          );
-        }}
+        onPress={() => makeDownload()}
         onLongPress={() => deleteFunction(photo.id)}
       >
         <Image
@@ -95,6 +111,7 @@ const Documentsmodal = ({ photo }) => {
     </View>
   );
 };
+
 
 const DocumentsScreen = () => {
   const [refreshing, setRefreshing] = useState(true);

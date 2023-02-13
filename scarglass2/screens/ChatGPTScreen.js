@@ -71,8 +71,8 @@ const ChatGPTresponses = () => {
 const styles = StyleSheet.create({
     MainContainer: {
  
-        alignItems: "center",
-        justifyCContent: "center",
+        alignItems: "flex-start",
+        justifyCContent: "flex-start",
         paddingVertical: 12,
         paddingHorizontal: 10,
         borderRadius: 20,
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
      
     },
       QuestionStyle: {
-        borderRadius: 30,
         color: '#000',
         // Setting Up Background Color of Text component.
         // Adding padding on Text component.
@@ -100,8 +99,7 @@ const styles = StyleSheet.create({
         // Adding padding on Text component.
         padding : 2,
         fontSize: 25,
-        textAlign: 'auto',
-        margin: 5,
+        textAlign: 'left',
         fontStyle: 'italic'
       }
 

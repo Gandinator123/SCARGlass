@@ -156,15 +156,13 @@ const TranslationScreen = () => {
     translationfont : {
       fontSize : 20,
       fontWeight : 'bold',
-      color : 'white',
-      paddingTop : 0,
+      color : 'black',
       paddingHorizontal : 10,
       alignSelf : 'baseline'
     },
     translationbox : {
         position: 'absolute',
-        top: 475,
-        bottom: 2,
+        bottom: 150,
         paddingVertical: 2,
         borderRadius: 20,
         margin : 15,
