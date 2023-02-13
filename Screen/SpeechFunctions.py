@@ -79,7 +79,7 @@ def audio_to_text():
 
 def text_to_function(text):
     if text == 'error':
-        error(None)
+        error(None, None)
 
     if text.lower().split()[0] == 'question':
         text = text[8:]
@@ -139,7 +139,7 @@ def camera_to_server(screen_id, img_type):
 
     camera.close()
 
-def take_picture(screen_id):
+def take_picture(screen_id, image):
     camera_to_server(screen_id, 0)
 
 # post to url: base_url + 'photos/create/
@@ -147,17 +147,17 @@ def take_picture(screen_id):
 # img_type: 1 -> translate, 2-> qr, 3 -> pdf
 
 # TODO
-def translate(screen_id):
+def translate(screen_id, image):
     camera_to_server(screen_id, 1)
     print("we are translating")
 
 # TODO
-def scan_qr(screen_id):
+def scan_qr(screen_id, image):
     camera_to_server(screen_id, 2)
     print("We are scanning a qr code")
 
 # TODO
-def scan_pdf(screen_id):
+def scan_pdf(screen_id, image):
     camera_to_server(screen_id, 3)
     print("we are scanning a pdf")
 
@@ -188,6 +188,6 @@ def chat_gpt(text):
 
     return r
 
-def error(screen_id):
+def error(screen_id, image):
     time.sleep(2)
     return "no valid function error"

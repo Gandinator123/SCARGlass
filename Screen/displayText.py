@@ -14,6 +14,7 @@ import threading
 import smbus2  
 from server import make_handler, get_ip_address
 from http.server import HTTPServer
+import cv2
 
 
 GPIO.setmode(GPIO.BCM)
@@ -183,7 +184,14 @@ class Screen:
         self.dateComponent.show()
         self.timeComponent.show()
         self.weatherComponent.show()
-        self.postProcess()
+
+        # cap = cv2.VideoCapture(0)
+        # startTime = datetime.now()
+        # while (datetime.now() - startTime).total_seconds() < 10:
+        #     self.preProcess()
+        #     ret, img = cap.read()
+        #     self.image.paste(Image.fromarray(img), (SCREEN_X_OFFSET, SCREEN_Y_OFFSET))
+        #     self.postProcess()
 
     def scrollPage(self):
         # start recording
@@ -246,7 +254,7 @@ class Screen:
                 self.global_state = -1
                 return
 
-            op_t = threading.Thread(target=OPERATIONS[op][1], args=(self.screen_id,))
+            op_t = threading.Thread(target=OPERATIONS[op][1], args=(self.screen_id, self.image))
             op_t.start()
 
             while op_t.is_alive():
