@@ -3,7 +3,7 @@ from screen.models import ScreenModel
 
 def upload_to(instance, filename):
   print(instance.screen.id)
-  return '{filename}'.format(filename=filename)
+  return '{instance.screen.id}/{filename}'.format(filename=filename)
 
 class PhotoModel(models.Model):
   screen = models.ForeignKey(ScreenModel, on_delete=models.CASCADE, related_name="photos")
