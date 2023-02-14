@@ -14,8 +14,7 @@ import threading
 import smbus2  
 from server import make_handler, get_ip_address
 from http.server import HTTPServer
-import cv2
-
+from Camera import Camera
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -26,7 +25,7 @@ dc_pin = digitalio.DigitalInOut(board.D6)
 reset_pin = digitalio.DigitalInOut(board.D4)
 bl_pin = digitalio.DigitalInOut(board.D22)
 
-BAUDRATE = 10000000 # max is 24MHz
+BAUDRATE = 24000000 # max is 24MHz
 
 SCREEN_WIDTH = 161
 SCREEN_HEIGHT = 84
@@ -79,7 +78,8 @@ class Screen:
         self.fontSize = 12
         self.font = ImageFont.truetype("fonts/Montserrat-Medium.otf", self.fontSize)
 
-        # SCROLL PAGE -> prefer this to be its own class but need to think more about how
+        # CAMERA
+        self.vs = Camera()
 
     def temperature_thread(self):
         bus = smbus2.SMBus(1)
@@ -184,14 +184,7 @@ class Screen:
         self.dateComponent.show()
         self.timeComponent.show()
         self.weatherComponent.show()
-
-        # cap = cv2.VideoCapture(0)
-        # startTime = datetime.now()
-        # while (datetime.now() - startTime).total_seconds() < 10:
-        #     self.preProcess()
-        #     ret, img = cap.read()
-        #     self.image.paste(Image.fromarray(img), (SCREEN_X_OFFSET, SCREEN_Y_OFFSET))
-        #     self.postProcess()
+        self.postProcess()
 
     def scrollPage(self):
         # start recording
@@ -254,10 +247,24 @@ class Screen:
                 self.global_state = -1
                 return
 
-            op_t = threading.Thread(target=OPERATIONS[op][1], args=(self.screen_id, self.image))
-            op_t.start()
+            # all other operations other than error require camera TODO handle error differently
 
-            while op_t.is_alive():
+            self.vs.start_stream()
+            time.sleep(1) # intiialise
+
+            curr = time.time()
+            while time.time() - curr < 5:
+                self.preProcess()
+                img = Image.fromarray(self.vs.read())
+                img = img.resize((142, 80), Image.ANTIALIAS)
+                self.image.paste(img, (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - 71, SCREEN_Y_OFFSET))
+                self.postProcess()
+
+            self.vs.start_capture()
+            time.sleep(1)
+            self.vs.process(target=OPERATIONS[op][1], screen_id=self.screen_id)
+
+            while self.vs.is_alive():
                 self.preProcess()
                 text = OPERATIONS[op][0]
                 (font_width, font_height) = self.font.getsize(text)
@@ -268,6 +275,8 @@ class Screen:
                     fill=self.fontColor,
                 )
                 self.postProcess()
+            
+            self.vs.stop()
 
         else:
             # op is text to render
@@ -275,12 +284,12 @@ class Screen:
         
         self.global_state = 0
 
-
     def server_thread(self):
         httpd = HTTPServer(('0.0.0.0', 8000), make_handler(screen=self))
         httpd.serve_forever()
 
     def pair(self):
+        self.preProcess()
         self.blackScreen()
         text = "Pairing..."
         (font_width, font_height) = self.font.getsize(text)
@@ -363,14 +372,6 @@ class Screen:
 
     def offState(self):
         self.blackScreen()
-        text = "I'm off!"
-        (font_width, font_height) = self.font.getsize(text)
-        self.draw.text(
-                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height // 2),
-                text,
-                font=self.font,
-                fill=(255, 255, 255),
-            )
         self.postProcess()
 
     def run(self):

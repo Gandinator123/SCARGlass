@@ -10,6 +10,7 @@ import requests
 import uuid
 import os
 import json
+from PIL import Image
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -118,12 +119,10 @@ def text_to_function(text):
         # no_valid_function_error()
         return 4
 
-def camera_to_server(screen_id, img_type):
-    camera = PiCamera()
-
-    ## showing the camera...
+def camera_to_server(image, screen_id, img_type):
     img_name = str(uuid.uuid4())
-    camera.capture('/home/pi/{}.jpg'.format(img_name))
+    img = Image.fromarray(image, "RGB")
+    img.save('/home/pi/{}.jpg'.format(img_name))
 
     ## sending the photo to the server
     url = "http://54.234.70.84:8000/photos/create/"
@@ -137,10 +136,8 @@ def camera_to_server(screen_id, img_type):
 
     os.remove('/home/pi/{}.jpg'.format(img_name))
 
-    camera.close()
-
 def take_picture(screen_id, image):
-    camera_to_server(screen_id, 0)
+    camera_to_server(image, screen_id, 0)
 
 # post to url: base_url + 'photos/create/
 # look at take picture, but:
@@ -148,17 +145,17 @@ def take_picture(screen_id, image):
 
 # TODO
 def translate(screen_id, image):
-    camera_to_server(screen_id, 1)
+    camera_to_server(image, screen_id, 1)
     print("we are translating")
 
 # TODO
 def scan_qr(screen_id, image):
-    camera_to_server(screen_id, 2)
+    camera_to_server(image, screen_id, 2)
     print("We are scanning a qr code")
 
 # TODO
 def scan_pdf(screen_id, image):
-    camera_to_server(screen_id, 3)
+    camera_to_server(image, screen_id, 3)
     print("we are scanning a pdf")
 
 def chat_gpt(text):
