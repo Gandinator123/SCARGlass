@@ -2,7 +2,7 @@ from django.db import models
 from screen.models import ScreenModel
 
 def upload_to(instance, filename):
-  print(instance.screen)
+  print(instance.screen.id)
   return '{filename}'.format(filename=filename)
 
 class PhotoModel(models.Model):
