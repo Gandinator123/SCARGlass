@@ -22,8 +22,11 @@ class PhotoList(generics.ListAPIView):
   def get_queryset(self):
     queryset = PhotoModel.objects.all()
     img_type = self.request.query_params.get('img_type')
+    screen_id = self.request.query_params.get('screen_id')
     if img_type:
       queryset = queryset.filter(img_type=img_type)
+    if screen_id:
+      queryset = queryset.filter(screen=screen_id)
 
     return queryset
 
