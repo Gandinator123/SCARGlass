@@ -92,7 +92,7 @@ class PhotoCreate(views.APIView):
 
       out = imutils.resize(warped, height = 650)
 
-      new = Image.fromarray(img)
+      new = Image.fromarray(out)
 
       # new.save(, 'JPEG', quality=85)
       path, ext = os.path.splitext(temp.name)
