@@ -29,4 +29,5 @@ class UserSerializer(serializers.ModelSerializer):
       'name',
       'date',
       'screens',
+      'avatar',
     )
