@@ -4,7 +4,7 @@ import uuid
 from .managers import UserManager
 
 def upload_to(instance, filename):
-  return '{id}/{filename}'.format(id=instance.id, filename=filename)
+  return 'users/{id}/{filename}'.format(id=instance.id, filename=filename)
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
   email = models.EmailField(max_length=255, unique=True)
