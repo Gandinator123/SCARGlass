@@ -96,7 +96,7 @@ class PhotoCreate(views.APIView):
 
       # new.save(, 'JPEG', quality=85)
       path, ext = os.path.splitext(temp.name)
-      p = '/home/ubuntu/SCARGlass/backend/media/' + path + '.pdf'
+      p = '/home/ubuntu/SCARGlass/backend/media/' + request.data['screen'] + '/' + path + '.pdf'
       new.save(p, format="PDF")
 
       request.data._mutable = True
