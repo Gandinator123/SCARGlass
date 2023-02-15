@@ -26,6 +26,9 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = UserSerializer
   queryset = UserModel.objects.all()
 
+  def put(self, request, *args, **kwargs):
+    return self.partial_update(request, *args, **kwargs)
+
 def getTokens(user):
   refresh = RefreshToken.for_user(user)
 
