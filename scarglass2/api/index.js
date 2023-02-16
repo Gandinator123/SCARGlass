@@ -6,6 +6,8 @@ const PAIRINGS_LIST_URL = "pairings/";
 const SCREEN_CREATE_URL = "screens/create/";
 const REFRESH_URL = "users/token/refresh/";
 const USER_LIST_URL = "users/";
+const QUESTION_LIST_URL = "questions/";
+const PHOTO_LIST_URL = "photos/";
 
 function postRequest(url, data, headers) {
   let promise = new Promise((resolve, reject) => {
@@ -108,10 +110,39 @@ async function getUser() {
   );
 }
 
+async function getQuestions() {
+  let url = BASE_URL + QUESTION_LIST_URL;
+  let screen_id = await AsyncStorage.getItem("screen");
+
+  return getRequest(
+    url,
+    {
+      screen_id: screen_id,
+    },
+    {}
+  );
+}
+
+async function getPhotos(img_type) {
+  let url = BASE_URL + PHOTO_LIST_URL;
+  let screen_id = await AsyncStorage.getItem("screen");
+
+  return getRequest(
+    url,
+    {
+      img_type: img_type,
+      screen_id: screen_id,
+    },
+    {}
+  );
+}
+
 let api = {
   refresh,
   getAllPairings,
   createScreen,
   getUser,
+  getQuestions,
+  getPhotos,
 };
 export default api;

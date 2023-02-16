@@ -120,7 +120,7 @@ function ResponsesScreen({ navigation }) {
         justifyContent: "center",
         alignItems: "center",
         paddingTop: 30,
-        backgroundColor:'white'
+        backgroundColor: "white",
       }}
     >
       <Button
@@ -304,9 +304,11 @@ const Stack = createNativeStackNavigator();
 const MainApp = () => {
   const [loading, setLoading] = useState(true);
   const [paired, setPaired] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [screenID, setscreenID] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [screenID, setscreenID] = useState("");
+  const [id, setId] = useState("");
   useEffect(() => {
     // check if user is associated with screen
     api
@@ -315,6 +317,8 @@ const MainApp = () => {
         console.log(response);
         setName(response.data[0].name);
         setEmail(response.data[0].email);
+        setAvatar(response.data[0].avatar);
+        setId(response.data[0].id);
         if (response.data[0].screens.length > 0) {
           setscreenID(response.data[0].screens[0].id.toString());
           AsyncStorage.setItem(
@@ -336,7 +340,13 @@ const MainApp = () => {
                 .getUser()
                 .then((resp) => {
                   console.log(resp.data);
+                  setName(resp.data[0].name);
+                  setEmail(resp.data[0].email);
+                  setAvatar(resp.data[0].avatar);
+                  setId(response.data[0].id);
                   if (resp.data[0].screens.length > 0) {
+                    setscreenID(response.data[0].screens[0].id.toString());
+
                     AsyncStorage.setItem(
                       "screen",
                       resp.data[0].screens[0].id.toString()
@@ -382,7 +392,19 @@ const MainApp = () => {
     >
       <Tab.Screen name="Home" component={ResponsesStackScreen} />
       <Tab.Screen name="Customize" component={HomeStackScreen} />
-      <Tab.Screen name="Account" children ={() => <SettingsScreen name={name} email={email} screenID={screenID}/>}/>
+      <Tab.Screen
+        name="Account"
+        children={() => (
+          <SettingsScreen
+            name={name}
+            email={email}
+            screenID={screenID}
+            avatar={avatar}
+            setAvatar={setAvatar}
+            id={id}
+          />
+        )}
+      />
     </Tab.Navigator>
   ) : (
     <ScanDevicesScreen setPaired={setPaired} />

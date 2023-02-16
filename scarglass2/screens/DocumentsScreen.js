@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from "expo-file-system";
 import {
   Text,
   View,
@@ -14,6 +14,8 @@ import {
   Alert,
 } from "react-native";
 import axios from "axios";
+import api from "../api";
+import * as Sharing from "expo-sharing";
 
 let BASE_URL = "http://54.234.70.84:8000/";
 
@@ -40,23 +42,20 @@ const deleteFunction = (photo_id) => {
   );
 };
 
+const makeDownload = async (image_url) => {
+  let link = image_url.slice(0, -4);
+  let pdf = link + ".pdf";
 
-const makeDownload = () => {
-  let link = image_url.slice(0,-4);
-  let pdf = link + '.pdf'
-  FileSystem.downloadAsync(
-   pdf,
-   FileSystem.documentDirectory + 'small.pdf'
- )
-   .then(({ uri }) => {
-     console.log('Finished downloading to ', uri);
-   })
-   .catch(error => {
-     console.error(error);
-   });
-
+  const downloadPath = FileSystem.cacheDirectory + "test.pdf";
+  // 1 - download the file to a local cache directory
+  const { uri: localUrl } = await FileSystem.downloadAsync(pdf, downloadPath);
+  // 2 - share it from your local storage :)
+  Sharing.shareAsync(localUrl, {
+    mimeType: "application/pdf", // Android
+    dialogTitle: "share-dialog title", // Android and Web
+    UTI: "public.item", // iOS
+  });
 };
-
 
 const Documentsmodal = ({ photo }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -92,7 +91,7 @@ const Documentsmodal = ({ photo }) => {
         </TouchableOpacity>
       </Modal>
       <TouchableOpacity
-        onPress={() => makeDownload()}
+        onPress={() => makeDownload(photo.photo)}
         onLongPress={() => deleteFunction(photo.id)}
       >
         <Image
@@ -112,15 +111,14 @@ const Documentsmodal = ({ photo }) => {
   );
 };
 
-
 const DocumentsScreen = () => {
   const [refreshing, setRefreshing] = useState(true);
 
   const [photos, setPhotos] = useState([]);
   useEffect(() => {
     if (refreshing) {
-      axios
-        .get(BASE_URL + "photos/", { params: { img_type: 3 } })
+      api
+        .getPhotos(3)
         .then((response) => {
           setPhotos([...response.data]);
           console.log(response.data);
@@ -145,7 +143,7 @@ const DocumentsScreen = () => {
           onRefresh={() => setRefreshing(!refreshing)}
         />
       }
-      style={{backgroundColor:'white'}}
+      style={{ backgroundColor: "white" }}
     >
       <View style={styles.background}>{renderPhotos}</View>
     </ScrollView>
@@ -158,7 +156,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     margin: 2,
-    backgroundColor : 'white'
+    backgroundColor: "white",
   },
   overlay: {
     position: "absolute",

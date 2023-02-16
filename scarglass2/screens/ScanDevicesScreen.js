@@ -15,9 +15,9 @@ const ScanDevicesScreen = ({ setPaired }) => {
     if (isRegistraionSuccess) {
       setTimeout(() => {
         setPaired(true);
-      }, 1000)
+      }, 1000);
     }
-  }, [isRegistraionSuccess])
+  }, [isRegistraionSuccess]);
 
   setTimeout(() => {
     setDelay(!timeDelay);
@@ -107,9 +107,9 @@ const ScanDevicesScreen = ({ setPaired }) => {
       api
         .getAllPairings()
         .then((response) => {
-          setIsRegistraionSuccess(true);
+          // setIsRegistraionSuccess(true);
           console.log(response.data);
-          //ping(response.data);
+          ping(response.data);
           // setPaired(true);
         })
         .catch((error) => {
@@ -118,24 +118,26 @@ const ScanDevicesScreen = ({ setPaired }) => {
     }
   }, [timeDelay]);
 
-  return isRegistraionSuccess ? <View
-  style={{
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: 'white'
-  }}
->
-  <Image
-    source={require("./../assets/tick.png")}
-    style={{
-      height: 150,
-      resizeMode: "contain",
-      alignSelf: "center",
-    }}
-  />
-  <Text style={styles.successTextStyle}>Pairing successful!</Text>
-</View> : (
-    <View style={{ flex: 1}}>
+  return isRegistraionSuccess ? (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        backgroundColor: "white",
+      }}
+    >
+      <Image
+        source={require("./../assets/tick.png")}
+        style={{
+          height: 150,
+          resizeMode: "contain",
+          alignSelf: "center",
+        }}
+      />
+      <Text style={styles.successTextStyle}>Pairing successful!</Text>
+    </View>
+  ) : (
+    <View style={{ flex: 1 }}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
