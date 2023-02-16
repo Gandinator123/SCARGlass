@@ -52,7 +52,8 @@ const Translationsmodal = ({ photo }) => {
             style={{
               width: 350,
               height: 200,
-              marginBottom: 100,
+              alignSelf: 'center',
+              marginTop: 200
             }}
             source={{
               uri: photo["photo"],
@@ -173,12 +174,10 @@ const styles = StyleSheet.create({
     alignSelf: "baseline",
   },
   translationbox: {
-    position: "absolute",
-    bottom: 150,
     paddingVertical: 2,
-    borderRadius: 20,
+    borderRadius: 25,
     margin: 15,
-    backgroundColor: "rgba(245, 235, 238, 0.7)",
+    backgroundColor: "#fafdfe",
     alignSelf: "baseline",
   },
 });

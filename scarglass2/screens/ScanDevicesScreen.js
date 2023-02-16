@@ -107,7 +107,7 @@ const ScanDevicesScreen = ({ setPaired }) => {
       api
         .getAllPairings()
         .then((response) => {
-          // setIsRegistraionSuccess(true);
+          //setIsRegistraionSuccess(true);
           console.log(response.data);
           ping(response.data);
           // setPaired(true);
