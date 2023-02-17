@@ -31,7 +31,7 @@ CHUNK = 4096
 RECORD_SECS = 3     #record time
 DEV_INDEX = 0
 WAV_OUTPUT_FILENAME = 'audio1.wav'
-LANGUAGES = {"french"}
+# LANGUAGES = {"french"}
 
 def record_audio():
     audio = pyaudio.PyAudio()
@@ -78,30 +78,25 @@ def audio_to_text():
         except:
             return ("error")
 
-def text_to_function(text):
+def text_to_function(text, screen_id):
     if text == 'error':
-        error(None, None)
+        return 4
 
     if text.lower().split()[0] == 'question':
         text = text[8:]
-        return chat_gpt(text)
+        return chat_gpt(text, screen_id)
         
     word_set = set(text.lower().split(' '))
 
     # TODO handle this
     if 'translate' in word_set:
-        # for x in LANGUAGES: 
-        #     if x in word_set:
-        #         translate(x)
-        #         return
-        # error()
         return 0
     
-    elif 'scan' in word_set and 'pdf' in word_set:
+    elif 'pdf' in word_set:
         # scan_pdf()
         return 1
     
-    elif 'scan' in word_set and 'qr' in word_set:
+    elif 'qr' in word_set:
         #scan_qr()
         return 2
 
@@ -112,14 +107,14 @@ def text_to_function(text):
     elif 'reload' in word_set:
         return 5
 
-    elif 'turn' in word_set and 'off' in word_set:
+    elif 'off' in word_set:
         return 6
 
     else:
-        # no_valid_function_error()
+        # error
         return 4
 
-def camera_to_server(image, screen_id, img_type):
+def camera_to_server(image, screen_id, img_type, status_code):
     img_name = str(uuid.uuid4())
     img = Image.fromarray(image, "RGB")
     img.save('/home/pi/{}.jpg'.format(img_name))
@@ -133,32 +128,24 @@ def camera_to_server(image, screen_id, img_type):
     response = requests.post(url, data=data, files=file)
 
     print(response.text)
+    print(response.status_code)
+    status_code[0] = response.status_code
 
     os.remove('/home/pi/{}.jpg'.format(img_name))
 
-def take_picture(screen_id, image):
-    camera_to_server(image, screen_id, 0)
+def take_picture(screen_id, image, status_code):
+    camera_to_server(image, screen_id, 0, status_code)
 
-# post to url: base_url + 'photos/create/
-# look at take picture, but:
-# img_type: 1 -> translate, 2-> qr, 3 -> pdf
+def translate(screen_id, image, status_code):
+    camera_to_server(image, screen_id, 1, status_code)
 
-# TODO
-def translate(screen_id, image):
-    camera_to_server(image, screen_id, 1)
-    print("we are translating")
+def scan_qr(screen_id, image, status_code):
+    camera_to_server(image, screen_id, 2, status_code)
 
-# TODO
-def scan_qr(screen_id, image):
-    camera_to_server(image, screen_id, 2)
-    print("We are scanning a qr code")
+def scan_pdf(screen_id, image, status_code):
+    camera_to_server(image, screen_id, 3, status_code)
 
-# TODO
-def scan_pdf(screen_id, image):
-    camera_to_server(image, screen_id, 3)
-    print("we are scanning a pdf")
-
-def chat_gpt(text):
+def chat_gpt(text, screen_id):
     api_key = OPENAI_API_KEY
     url = 'https://api.openai.com/v1/completions'
     data = {
@@ -178,13 +165,10 @@ def chat_gpt(text):
     # post to server
     data = {
         'question': text,
-        'response': r
+        'response': r,
+        'screen': screen_id
     }
     response = requests.post('http://54.234.70.84:8000/questions/create/', json=data)
     print(response.text)
 
     return r
-
-def error(screen_id, image):
-    time.sleep(2)
-    return "no valid function error"

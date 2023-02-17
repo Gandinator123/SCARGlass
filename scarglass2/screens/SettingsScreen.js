@@ -43,9 +43,10 @@ function SettingsScreen({ name, email, screenID, avatar, setAvatar, id }) {
       const data = new FormData();
       data.append("avatar", {
         uri: result.assets[0].uri,
-        name: result.assets[0].fileName,
+        name: "avatar.jpg",
         type: "image/png",
       });
+      console.log("http://54.234.70.84:8000/users/" + id + "/", data);
       axios
         .put("http://54.234.70.84:8000/users/" + id + "/", data)
         .then((response) => {

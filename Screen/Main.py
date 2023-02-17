@@ -8,7 +8,7 @@ from adafruit_rgb_display import st7735
 from datetime import datetime
 import requests
 import json
-from SpeechFunctions import record_audio, audio_to_text, text_to_function, translate, scan_pdf, scan_qr, take_picture, error
+from SpeechFunctions import record_audio, audio_to_text, text_to_function, translate, scan_pdf, scan_qr, take_picture
 from Home import TimeComponent, DateComponent, WeatherComponent
 import threading
 import smbus2  
@@ -39,13 +39,14 @@ OPERATIONS = [
     ('Scanning...', scan_pdf), # scan_pdf()
     ('Scanning...', scan_qr), # scan_qr()
     ('Hold still...', take_picture), # take_picture()
-    ('Oops! Try again?', error),
 ]
         
 class Screen:
     def __init__(self):
         # GLOBALS
+        self.screen_id = None
         self.global_state = -4
+
         button_t = threading.Thread(target=self.button_thread)
         button_t.start()
 
@@ -175,7 +176,7 @@ class Screen:
                     fill=self.fontColor,
                 )
 
-                x += font_width                
+                x += font_width
 
             self.postProcess()
 
@@ -185,6 +186,23 @@ class Screen:
         self.timeComponent.show()
         self.weatherComponent.show()
         self.postProcess()
+
+    def status_message(self, text):
+
+        text_arr = text.split('\n')
+        longest_text = max(text_arr, key=len)
+        (font_width, font_height) = self.font.getsize(longest_text)
+
+        curr = time.time()
+        while time.time()-curr < 3:
+            self.preProcess()
+            self.draw.text(
+                (SCREEN_X_OFFSET + SCREEN_WIDTH // 2 - font_width // 2, SCREEN_Y_OFFSET + SCREEN_HEIGHT // 2 - font_height * len(text_arr) // 2),
+                text,
+                font=self.font,
+                fill=self.fontColor,
+            )
+            self.postProcess()
 
     def scrollPage(self):
         # start recording
@@ -222,7 +240,7 @@ class Screen:
 
         # handle text
         print(result)
-        op = text_to_function(result[0])
+        op = text_to_function(result[0], self.screen_id)
         if isinstance(op, int):
             # op is operation 
             if op == 6:
@@ -247,10 +265,15 @@ class Screen:
                 self.global_state = -1
                 return
 
-            # all other operations other than error require camera TODO handle error differently
+            elif op == 4:
+                # microphone error
+                self.status_message('Error! Try again?\nWe thought you said:\n' + result[0])
+                self.global_state = 0
+                return
 
+            # all other operations require camera: show preview then handle operation
             self.vs.start_stream()
-            time.sleep(1) # intiialise
+            time.sleep(1)
 
             curr = time.time()
             while time.time() - curr < 5:
@@ -262,7 +285,9 @@ class Screen:
 
             self.vs.start_capture()
             time.sleep(1)
-            self.vs.process(target=OPERATIONS[op][1], screen_id=self.screen_id)
+
+            status_code = [None]
+            self.vs.process(target=OPERATIONS[op][1], screen_id=self.screen_id, status_code=status_code)
 
             while self.vs.is_alive():
                 self.preProcess()
@@ -275,6 +300,14 @@ class Screen:
                     fill=self.fontColor,
                 )
                 self.postProcess()
+
+            # check status code to show success/error message
+            if status_code[0] == 500:
+                # error
+                self.status_message("Error! Try again?")
+            elif status_code[0] == 200:
+                # success
+                self.status_message("Success!")
             
             self.vs.stop()
 
@@ -286,10 +319,10 @@ class Screen:
 
     def server_thread(self):
         httpd = HTTPServer(('0.0.0.0', 8000), make_handler(screen=self))
-        httpd.serve_forever()
+        while not self.screen_id:
+            httpd.serve_forever()
 
     def pair(self):
-        self.preProcess()
         self.blackScreen()
         text = "Pairing..."
         (font_width, font_height) = self.font.getsize(text)

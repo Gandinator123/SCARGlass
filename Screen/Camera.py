@@ -59,9 +59,9 @@ class Camera:
 		# return the frame most recently read
 		return self.frame
 
-	def process(self, target, screen_id):
+	def process(self, target, screen_id, status_code):
 			# process the image with the required operation
-			self.op_t = threading.Thread(target=target, args=(screen_id, self.read()))
+			self.op_t = threading.Thread(target=target, args=(screen_id, self.read(), status_code))
 			self.op_t.start()
 
 	def is_alive(self):
