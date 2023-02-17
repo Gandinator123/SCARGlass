@@ -1,6 +1,7 @@
 # SCARGlass
 Embedded systems project
 
+Made by Rohan Gandhi, Anthony Jones, Chris Myers, Sherif Agbabiaka
 
 Dependencies to install on final Raspberry PI
 
